@@ -21,7 +21,14 @@ namespace MarsWebSite
         {
             // if user is authenticated and authorized, otherwise return nothing
             log.Info("C# HTTP trigger function processed a request.");
-
+            try
+            {
+                name = System.Security.Claims.ClaimsPrincipal.Current.Identity.Name;
+            }
+            catch {
+                //
+                log.Warning("can't get user identity or it's an anonymous user.");
+            }
             // Fetching the name from the path parameter in the request URL
             return req.CreateResponse(HttpStatusCode.OK, "Hello " + name + "!!");
         }
