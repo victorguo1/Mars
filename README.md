@@ -15,7 +15,7 @@ The Function App will return SPA
 
 The SPA will communicate a WebAPI which will provide list of files stored on the Azure Blob Storage. 
 
-<img src="https://raw.githubusercontent.com/victorguo1/Mars/07f6c71e238ba5b58e17c4df70b1c4447b587aa2/Assets/Mars%20Site%20Architecture.jpg" ></img> 
+<img src="https://github.com/victorguo1/Mars/blob/bf3034e515b53ee6845bf7c99d9169fe9dbe45bc/Assets/Mars%20Site%20Architecture.jpg?raw=true" ></img> 
 
 ## Development
 ### Serverless 101 
