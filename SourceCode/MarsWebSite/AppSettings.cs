@@ -13,8 +13,9 @@ namespace MarsWebSite
             get { return GetEnvironmentVariable("indexPage"); }
         }
 
-        public static string CoureseContentEndPoint {
-            get { return GetEnvironmentVariable("CoureseContentEndPoint"); }
+        public static string CourseStorageAccount
+        {
+            get { return GetEnvironmentVariable("CourseStorageAccount"); }
         }
 
         public static string CourseSASToken

@@ -14,18 +14,33 @@ namespace MarsWebSite.Components
 {
     public class StorageService
     {
+        StorageAppSettings _settings;
         FileStorageService _service;
+        TableStorageService _tableService;
+        private string _couserSASToken;
         public StorageService() {
-            string coureseContentEndPoint = AppSettings.CoureseContentEndPoint;
-            string couserSASToken = AppSettings.CourseSASToken;            
-            _service = new FileStorageService(coureseContentEndPoint, couserSASToken);    
+            _settings = new StorageAppSettings(AppSettings.CourseStorageAccount);
+            _couserSASToken = AppSettings.CourseSASToken;                  
         }
 
         public string ListFilesOrDirectories(string sharefolder)
         {
+            string coureseContentEndPoint = _settings.FileEndPoint;
+            _service = new FileStorageService(coureseContentEndPoint, _couserSASToken);
             var list = _service.ListFilesOrDirectories(sharefolder);
             string resultJson = _service.ConvertToJson(list);
             return resultJson;
+        }
+        public CloudFile GetContent(string path,string fileName) {
+            string coureseContentEndPoint = _settings.FileEndPoint;
+            FileStorageService service = new FileStorageService(coureseContentEndPoint, _couserSASToken);
+            var file = service.GetFile(path, fileName);
+            return file;
+        }
+        public string GetCourses() {
+            string tableEndPoint = _settings.TableEndPoint;
+            var _tableService = new TableStorageService(tableEndPoint, _couserSASToken);
+            return _tableService.GetCourses();
         }
     }
 }

@@ -12,13 +12,17 @@ namespace Mars.Components.Tests
     [TestClass()]
     public class FileStorageServiceTests
     {
-        private string _endPoint ;
-        private string _sasToken ;
-        private string _shareFolder ;
+        private string _endPoint;
+        private string _sasToken;
+        private string _shareFolder;
 
-        public FileStorageServiceTests() {
-            _endPoint = ConfigurationManager.AppSettings["EndPoint"];
-            _sasToken = ConfigurationManager.AppSettings["SasToken"];
+        public FileStorageServiceTests()
+        {
+            string storageAccount = ConfigurationManager.AppSettings["CourseStorageAccount"];
+            _sasToken = ConfigurationManager.AppSettings["CourseSASToken"];
+
+            var settings = new StorageAppSettings(storageAccount);
+            _endPoint = settings.FileEndPoint;
             _shareFolder = ConfigurationManager.AppSettings["ShareFolder"];
         }
 
@@ -33,8 +37,17 @@ namespace Mars.Components.Tests
         [TestMethod()]
         public void ListFilesOrDirectoriesTest()
         {
-            FileStorageService service = new FileStorageService(_endPoint,_sasToken);
+            FileStorageService service = new FileStorageService(_endPoint, _sasToken);
             var list = service.ListFilesOrDirectories(_shareFolder);
+
+            Assert.AreEqual(true, list.Length > 0);
+        }
+
+        [TestMethod()]
+        public void GetFileTest()
+        {
+            FileStorageService service = new FileStorageService(_endPoint, _sasToken);
+            service.GetFile("azuresolution/CoursePPT", "00_02_Overview of the Microsoft Azure Platform.pptx");
         }
     }
 }

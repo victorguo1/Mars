@@ -5,6 +5,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using MarsWebSite.Components;
+using System.Net.Http.Headers;
 
 namespace MarsWebSite
 {
@@ -21,21 +22,45 @@ namespace MarsWebSite
         public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Services/{name}")]HttpRequestMessage req, string name, TraceWriter log)
         {
             // if user is authenticated and authorized, otherwise return nothing
-            log.Info("C# HTTP trigger function processed a request.");
+            log.Info("Services request.");
             try
             {
                 string user = System.Security.Claims.ClaimsPrincipal.Current.Identity.Name;
                 log.Info(user);
             }
-            catch {
+            catch
+            {
                 //
                 log.Warning("can't get user identity or it's an anonymous user.");
             }
 
             StorageService service = new StorageService();
-            string list = service.ListFilesOrDirectories(name.Replace("-","/"));
+            string list = service.ListFilesOrDirectories(name.Replace("-", "/"));
             // Fetching the name from the path parameter in the request URL
             return req.CreateResponse(HttpStatusCode.OK, list, "application/json");
-        }       
+        }
+
+        [FunctionName("GetFile")]
+        public static HttpResponseMessage GetFile(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", 
+            Route = "GetFile/{path}/{file}")]HttpRequestMessage req, 
+            string path, string file, TraceWriter log)
+        {
+            path = path.Replace("-", "/");
+            StorageService service = new StorageService();
+            var content = service.GetContent(path, file);
+            System.IO.MemoryStream stream = new System.IO.MemoryStream();
+            content.DownloadToStream(stream, null);
+            stream.Seek(0,System.IO.SeekOrigin.Begin);
+            var result = new HttpResponseMessage(HttpStatusCode.OK);
+
+            result.Content = new StreamContent(stream);
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = file
+            };
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            return result;
+        }
     }
 }

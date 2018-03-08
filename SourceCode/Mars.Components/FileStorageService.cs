@@ -12,13 +12,14 @@ namespace Mars.Components
     public class FileStorageService
     {
         CloudFileClient _sasClient;
+        
         public FileStorageService(string endPoint,string sasToken)
         {
-            string couresContentEndPoint = endPoint;
+            string courseContentEndPoint = endPoint;
             string courseSASToken = sasToken;
 
             StorageCredentials creds = new StorageCredentials(courseSASToken);
-            _sasClient = new CloudFileClient(new Uri(couresContentEndPoint), creds);
+            _sasClient = new CloudFileClient(new Uri(courseContentEndPoint), creds);
         }
 
         public object[] ListFilesOrDirectories(string shareFolder)
@@ -27,8 +28,6 @@ namespace Mars.Components
             var rootDirectory = share.GetRootDirectoryReference();
             var dirs = rootDirectory.ListFilesAndDirectories();           
             var list = dirs.ToList<IListFileItem>();
-
-            var o = rootDirectory.ListFilesAndDirectoriesSegmented(null);
 
             string type = string.Empty;
             string size = string.Empty;
@@ -68,6 +67,13 @@ namespace Mars.Components
                 };
             }
             return content;
+        }
+
+        public CloudFile GetFile(string shareFolder, string fileName) {
+           var share = _sasClient.GetShareReference(shareFolder);
+           var dir = share.GetRootDirectoryReference();
+           var file = dir.GetFileReference(fileName);
+            return file;
         }
 
         public string ConvertToJson(object objects) {
