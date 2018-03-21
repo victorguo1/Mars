@@ -14,10 +14,9 @@ namespace MarsWebSite.Components
 {
     public class StorageService
     {
-        StorageAppSettings _settings;
-        FileStorageService _service;
-        TableStorageService _tableService;
+        private StorageAppSettings _settings;
         private string _couserSASToken;
+
         public StorageService() {
             _settings = new StorageAppSettings(AppSettings.CourseStorageAccount);
             _couserSASToken = AppSettings.CourseSASToken;                  
@@ -26,9 +25,9 @@ namespace MarsWebSite.Components
         public string ListFilesOrDirectories(string sharefolder)
         {
             string coureseContentEndPoint = _settings.FileEndPoint;
-            _service = new FileStorageService(coureseContentEndPoint, _couserSASToken);
-            var list = _service.ListFilesOrDirectories(sharefolder);
-            string resultJson = _service.ConvertToJson(list);
+            FileStorageService service = new FileStorageService(coureseContentEndPoint, _couserSASToken);
+            var list = service.ListFilesOrDirectories(sharefolder);
+            string resultJson = service.ConvertToJson(list);
             return resultJson;
         }
         public CloudFile GetContent(string path,string fileName) {
@@ -41,6 +40,18 @@ namespace MarsWebSite.Components
             string tableEndPoint = _settings.TableEndPoint;
             var _tableService = new TableStorageService(tableEndPoint, _couserSASToken);
             return _tableService.GetCourses();
+        }
+
+        public string GetEnrollment(string email) {
+            string tableEndPoint = _settings.TableEndPoint;
+            var _tableService = new TableStorageService(tableEndPoint, _couserSASToken);
+            return _tableService.GetEnrollment(email);
+        }
+
+        public bool IsAllowDownload(string email, string path) {
+            string tableEndPoint = _settings.TableEndPoint;
+            var _tableService = new TableStorageService(tableEndPoint, _couserSASToken);
+            return _tableService.IsAllowedDownload(email, path);
         }
     }
 }

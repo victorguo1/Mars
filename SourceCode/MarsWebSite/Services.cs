@@ -23,15 +23,9 @@ namespace MarsWebSite
         {
             // if user is authenticated and authorized, otherwise return nothing
             log.Info("Services request.");
-            try
-            {
-                string user = System.Security.Claims.ClaimsPrincipal.Current.Identity.Name;
-                log.Info(user);
-            }
-            catch
-            {
-                //
-                log.Warning("can't get user identity or it's an anonymous user.");
+            string user = UserManager.GetAuthenticatedUser();
+            if (user != null && user.Length > 0) {
+                return req.CreateResponse(HttpStatusCode.OK, "", "application/json");
             }
 
             StorageService service = new StorageService();
@@ -47,20 +41,44 @@ namespace MarsWebSite
             string path, string file, TraceWriter log)
         {
             path = path.Replace("-", "/");
+            string email = UserManager.GetAuthenticatedUser();
             StorageService service = new StorageService();
-            var content = service.GetContent(path, file);
-            System.IO.MemoryStream stream = new System.IO.MemoryStream();
-            content.DownloadToStream(stream, null);
-            stream.Seek(0,System.IO.SeekOrigin.Begin);
-            var result = new HttpResponseMessage(HttpStatusCode.OK);
 
-            result.Content = new StreamContent(stream);
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            if (service.IsAllowDownload(email, path))
             {
-                FileName = file
-            };
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-            return result;
+                var content = service.GetContent(path, file);
+                System.IO.MemoryStream stream = new System.IO.MemoryStream();
+                content.DownloadToStream(stream, null);
+                stream.Seek(0, System.IO.SeekOrigin.Begin);
+                var result = new HttpResponseMessage(HttpStatusCode.OK);
+
+                result.Content = new StreamContent(stream);
+                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = file
+                };
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                return result;
+            }
+            else {
+                return req.CreateResponse(HttpStatusCode.OK, "Access Denied");
+            }
+        }
+
+        [FunctionName("Enrollment")]
+        public static HttpResponseMessage GetEnrollment(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get",
+            Route = "Enrollment")]HttpRequestMessage req, TraceWriter log) {
+
+            string user = UserManager.GetAuthenticatedUser();
+            if (user == null) {
+                log.Warning("Services.GetEnrollment unauthenciated user.");
+            }
+
+            StorageService service = new StorageService();
+            string list = service.GetEnrollment(user);
+            
+            return req.CreateResponse(HttpStatusCode.OK, list, "application/json");
         }
     }
 }

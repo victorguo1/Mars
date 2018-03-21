@@ -16,7 +16,7 @@ namespace MarsWebSite
         [FunctionName("Index")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
-            log.Info("C# HTTP trigger function processed a request.");
+            log.Info("Index request.");
 
             var response = new HttpResponseMessage(HttpStatusCode.OK);
             var stream = new FileStream(AppSettings.IndexPage, FileMode.Open);
