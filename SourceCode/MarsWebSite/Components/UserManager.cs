@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,8 @@ namespace MarsWebSite.Components
             string user = null;
             try
             {
-                user = System.Security.Claims.ClaimsPrincipal.Current.Identity.Name;
+                //user = System.Security.Claims.ClaimsPrincipal.Current.Identity.Name;
+                user = System.Security.Claims.ClaimsPrincipal.Current.FindFirst(ClaimTypes.Email).Value; 
             }
             catch
             {
