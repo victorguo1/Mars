@@ -74,6 +74,7 @@ namespace MarsWebSite
             if (user == null) {
                 log.Warning("Services.GetEnrollment unauthenciated user.");
             }
+            log.Info(user);
 
             StorageService service = new StorageService();
             string list = service.GetEnrollment(user);
