@@ -105,16 +105,24 @@ namespace MarsWebSite
             Route = "SignOut")]HttpRequestMessage req, TraceWriter log)
         {
             var cookies = req.Headers.GetCookies();
-            foreach (var c in cookies) {
-                log.Info(c.ToString());  
-                c.Expires = DateTime.Now.AddDays(-1);
-            }
+            var result = new HttpResponseMessage(HttpStatusCode.OK);
 
+            //clean up auth cookie
+            foreach (var cookieHeaderValue in cookies) {
+                 foreach (var c in cookieHeaderValue.Cookies) {
+                    log.Info(string.Format("Cookie name:{0}={1}",c.Name,c.Value));
+                    var respCookie = new CookieHeaderValue(c.Name, string.Empty);
+                    respCookie.Expires = DateTime.Now.AddDays(-1);
+                    result.Headers.AddCookies(new CookieHeaderValue[] { respCookie });
+                }
+            }
+            
             foreach (var h in req.Headers) {
                  log.Info(string.Format("header key {0}:{1}",h.Key,h.Value));
             }
 
-            return req.CreateResponse(HttpStatusCode.OK, "Signed Out");
+            result.Content = new StringContent("Signed Out");
+            return result;
         }
     }
 }
