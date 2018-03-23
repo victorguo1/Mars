@@ -23,8 +23,8 @@ namespace MarsWebSite
         {
             // if user is authenticated and authorized, otherwise return nothing
             log.Info("Services request.");
-            string user = UserManager.GetAuthenticatedUser();
-            if (user != null && user.Length > 0) {
+            string email = UserManager.GetAuthenticatedEmail();
+            if (email != null && email.Length > 0) {
                 return req.CreateResponse(HttpStatusCode.OK, "", "application/json");
             }
 
@@ -41,7 +41,7 @@ namespace MarsWebSite
             string path, string file, TraceWriter log)
         {
             path = path.Replace("-", "/");
-            string email = UserManager.GetAuthenticatedUser();
+            string email = UserManager.GetAuthenticatedEmail();
             StorageService service = new StorageService();
 
             if (service.IsAllowDownload(email, path))
@@ -70,16 +70,32 @@ namespace MarsWebSite
             [HttpTrigger(AuthorizationLevel.Anonymous, "get",
             Route = "Enrollment")]HttpRequestMessage req, TraceWriter log) {
 
-            string user = UserManager.GetAuthenticatedUser();
-            if (user == null) {
+            string email = UserManager.GetAuthenticatedEmail();
+            if (email == null) {
                 log.Warning("Services.GetEnrollment unauthenciated user.");
             }
-            log.Info(user);
+            log.Info(email);
 
             StorageService service = new StorageService();
-            string list = service.GetEnrollment(user);
+            string list = service.GetEnrollment(email);
             
             return req.CreateResponse(HttpStatusCode.OK, list, "application/json");
+        }
+
+        [FunctionName("GetUser")]
+        public static HttpResponseMessage GetUser(
+           [HttpTrigger(AuthorizationLevel.Anonymous, "get",
+            Route = "User")]HttpRequestMessage req, TraceWriter log)
+        {
+
+            string user = UserManager.GetAuthenticatedUser();
+            if (user == null)
+            {
+                log.Warning("Services.GetEnrollment unauthenciated user.");
+            }
+            log.Info(user);           
+
+            return req.CreateResponse(HttpStatusCode.OK, user);
         }
     }
 }

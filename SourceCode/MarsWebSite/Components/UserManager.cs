@@ -9,12 +9,25 @@ namespace MarsWebSite.Components
 {
     public class UserManager
     {
-        public static string GetAuthenticatedUser() {
+        public static string GetAuthenticatedEmail() {
+            string email = null;
+            try
+            {
+                email = System.Security.Claims.ClaimsPrincipal.Current.FindFirst(ClaimTypes.Email).Value; 
+            }
+            catch
+            {
+                // Not authenticated
+            }
+            return email;
+        }
+
+        public static string GetAuthenticatedUser()
+        {
             string user = null;
             try
             {
-                //user = System.Security.Claims.ClaimsPrincipal.Current.Identity.Name;
-                user = System.Security.Claims.ClaimsPrincipal.Current.FindFirst(ClaimTypes.Email).Value; 
+                user = System.Security.Claims.ClaimsPrincipal.Current.Identity.Name;
             }
             catch
             {
