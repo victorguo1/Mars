@@ -106,7 +106,12 @@ namespace MarsWebSite
         {
             var cookies = req.Headers.GetCookies();
             foreach (var c in cookies) {
+                log.Info(c.ToString());  
                 c.Expires = DateTime.Now.AddDays(-1);
+            }
+
+            foreach (var h in req.Headers) {
+                 log.Info(string.Format("header key {0}:{1}",h.Key,h.Value));
             }
 
             return req.CreateResponse(HttpStatusCode.OK, "Signed Out");
