@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using MarsWebSite.Components;
 using System.Net.Http.Headers;
+using System;
 
 namespace MarsWebSite
 {
@@ -93,9 +94,22 @@ namespace MarsWebSite
             {
                 log.Warning("Services.GetEnrollment unauthenciated user.");
             }
-            log.Info(user);           
+            log.Info(user);                         
 
             return req.CreateResponse(HttpStatusCode.OK, user);
+        }
+
+        [FunctionName("SignOut")]
+        public static HttpResponseMessage SignOut(
+          [HttpTrigger(AuthorizationLevel.Anonymous, "get",
+            Route = "SignOut")]HttpRequestMessage req, TraceWriter log)
+        {
+            var cookies = req.Headers.GetCookies();
+            foreach (var c in cookies) {
+                c.Expires = DateTime.Now.AddDays(-1);
+            }
+
+            return req.CreateResponse(HttpStatusCode.OK, "Signed Out");
         }
     }
 }
