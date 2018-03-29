@@ -22,10 +22,11 @@ namespace MarsWebSite
         [FunctionName("Services")]
         public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Services/{name}")]HttpRequestMessage req, string name, TraceWriter log)
         {
-            // if user is authenticated and authorized, otherwise return nothing
-            log.Info("Services request.");
+            // if user is authenticated and authorized, otherwise return nothing           
             string email = UserManager.GetAuthenticatedEmail();
+            log.Info(email);
             if (email != null && email.Length > 0) {
+                log.Info("empty email.");
                 return req.CreateResponse(HttpStatusCode.OK, "", "application/json");
             }
 

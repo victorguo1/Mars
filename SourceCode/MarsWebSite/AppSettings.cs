@@ -9,8 +9,11 @@ namespace MarsWebSite
             return Environment.GetEnvironmentVariable(name, EnvironmentVariableTarget.Process);
         }
 
+        public static string SiteRoot {
+            get { return GetEnvironmentVariable("SiteRoot"); }
+        }
         public static string IndexPage {
-            get { return GetEnvironmentVariable("indexPage"); }
+            get { return SiteRoot + "index.html"; }
         }
 
         public static string CourseStorageAccount
