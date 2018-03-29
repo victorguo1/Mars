@@ -34,7 +34,9 @@ namespace MarsWebSite
         {
             var response = new HttpResponseMessage(HttpStatusCode.OK);
             var stream = new FileStream(AppSettings.SiteRoot + file, FileMode.Open);
+            log.Info("file path is " + AppSettings.SiteRoot + file);
             response.Content = new StreamContent(stream);
+
             string contentType = "text/html";
             string fileType = System.IO.Path.GetExtension(file).Remove(0, 1);
             if (fileType == "png"
@@ -42,8 +44,10 @@ namespace MarsWebSite
                 || fileType == "jpg" || fileType == "jpeg"
                 || fileType == "gif"
                 ) {
-                contentType = "image/" + fileType;
+                contentType = "image/" + fileType;             
             }
+            log.Info("content type is " + contentType);
+
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
             return response;
         }
