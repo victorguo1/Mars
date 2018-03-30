@@ -33,8 +33,8 @@ namespace MarsWebSite
             HttpRequestMessage req, string path, string file, TraceWriter log)
         {
             var response = new HttpResponseMessage(HttpStatusCode.OK);
-            var stream = new FileStream(AppSettings.SiteRoot + file, FileMode.Open);
-            log.Info("file path is " + AppSettings.SiteRoot + file);
+            var stream = new FileStream(AppSettings.SiteRoot + @"\" + path + @"\" + file, FileMode.Open);
+            log.Info("file path is " + AppSettings.SiteRoot +@"\" + path + @"\" + file);
             response.Content = new StreamContent(stream);
 
             string contentType = "text/html";
