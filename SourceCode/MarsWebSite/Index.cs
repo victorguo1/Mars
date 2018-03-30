@@ -29,8 +29,8 @@ namespace MarsWebSite
 
         [FunctionName("Site")]
         public static async Task<HttpResponseMessage> GetSiteContent([HttpTrigger(AuthorizationLevel.Anonymous, "get",
-            Route = "Site/{file}")]
-            HttpRequestMessage req, string file, TraceWriter log)
+            Route = "Site/{path}/{file}")]
+            HttpRequestMessage req, string path, string file, TraceWriter log)
         {
             var response = new HttpResponseMessage(HttpStatusCode.OK);
             var stream = new FileStream(AppSettings.SiteRoot + file, FileMode.Open);
@@ -38,14 +38,24 @@ namespace MarsWebSite
             response.Content = new StreamContent(stream);
 
             string contentType = "text/html";
-            string fileType = System.IO.Path.GetExtension(file).Remove(0, 1);
-            if (fileType == "png"
-                || fileType == "img"
-                || fileType == "jpg" || fileType == "jpeg"
-                || fileType == "gif"
-                ) {
-                contentType = "image/" + fileType;             
+
+            string fileType = System.IO.Path.GetExtension(file).Remove(0, 1).ToLower();
+            switch (fileType)
+            {
+                case "png":
+                case "img":
+                case "jpg":
+                case "jpeg":
+                case "gif":
+                    contentType = "image/" + fileType; break;
+                case "css":
+                    contentType = "text/css"; break;
+                case "js":
+                    contentType = "text/javascript"; break;
+                default:
+                    break;
             }
+             
             log.Info("content type is " + contentType);
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
