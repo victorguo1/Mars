@@ -33,19 +33,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
-    <body>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $.ajax({
-                    url: "User",
-                    type: "GET",
-                    success: function (result) {
-                        $("#user").text(result);
-                    }
-                });
-            });
-
-        </script>
+    <body>       
         <div class="container" ng-app="myApp" ng-controller="customersCtrl">
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">
@@ -57,12 +45,20 @@
                     <table>
                         <tr>
                             <td><a href="Services/awssoluationarchitect"><img src="site/awssoluationarchitect.png" alt="AWS Certified Solution Architect - Associate" /></a></td>
-                            <td><a href="Services/azuresolution"><img src="site/azuresolution.png" alt="Developing Azure Solution" /> </a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="Services/azuresolution"><img src="site/azuresolution.png" alt="Developing Azure Solution" /> </a>
+                            </td>
                         </tr>
                     </table>   
                 </div>
+                </div>
+            <div class="row">
                 <div class="col-md-4 col-md-offset-4">
-                    <h2>.Net Development</h2>
+                <h2>.Net Development</h2>
+                    <div><img src="site/dotnetdevelopment.png" alt=".Net Development" /></div>
+                    <div><a href="Services/foundation">.Net Foundation</a> </div>
+                    <div><a href="Services/mcts">.Net MCTS</a> </div>          
                 </div>
             </div>
         </div>
