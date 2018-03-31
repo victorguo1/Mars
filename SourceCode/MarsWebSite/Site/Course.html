@@ -55,6 +55,7 @@
                 <a href="" ng-click="myFunction()"><h4>{{root}}</h4></a>
             </div>
         </div>
+        {{content}}
     </div>
     <script>
         var app = angular.module('myApp', []);
@@ -70,7 +71,10 @@
             $scope.course = $location.search()['course'];
             $scope.root = $location.search()['root'];
 
-            $scope.count = 0;
+            $http.get("Services/" + $scope.root).then(function (response) {
+                $scope.content = response.data.records;
+            });
+
             $scope.myFunction = function ($http) {
                 $http.get("Services/" + $scope.root).then(function (response) {
                     $scope.user = "Hello " + response.data + "!";
