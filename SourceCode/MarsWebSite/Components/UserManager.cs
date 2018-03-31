@@ -10,7 +10,7 @@ namespace MarsWebSite.Components
     public class UserManager
     {
         public static string GetAuthenticatedEmail() {
-            string email = null;
+            string email = string.Empty;
             try
             {
                 email = System.Security.Claims.ClaimsPrincipal.Current.FindFirst(ClaimTypes.Email).Value; 
@@ -24,7 +24,7 @@ namespace MarsWebSite.Components
 
         public static string GetAuthenticatedUser()
         {
-            string user = null;
+            string user = string.Empty;
             try
             {
                 user = System.Security.Claims.ClaimsPrincipal.Current.Identity.Name;

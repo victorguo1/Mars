@@ -27,6 +27,23 @@ namespace MarsWebSite
             return response;
         }
 
+        [FunctionName("Page")]
+        public static async Task<HttpResponseMessage> Course(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", 
+            Route = "{page}")]
+            HttpRequestMessage req, 
+            string page, 
+            TraceWriter log)
+        {
+            log.Info( page + " requested. " + req.RequestUri.AbsoluteUri);
+
+            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            var stream = new FileStream(AppSettings.SiteRoot + @"\" + page, FileMode.Open);
+            response.Content = new StreamContent(stream);
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
+            return response;
+        }
+
         [FunctionName("Site")]
         public static async Task<HttpResponseMessage> GetSiteContent([HttpTrigger(AuthorizationLevel.Anonymous, "get",
             Route = "Site/{path}/{file}")]

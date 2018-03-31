@@ -17,9 +17,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <!-- Custom Fonts -->
-    <link href="site/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -38,66 +35,66 @@
     <body>       
         <div class="container" ng-app="myApp" ng-controller="customersCtrl">
             <div class="row">
-                <div class="col-md-4 col-md-offset-4">
+                <div class="col-md-8 col-md-offset-2">
                     <h1>From Zero to Hero!</h1>
                     <div>{{user}}</div>
                 </div>
-             </div>
+            </div>
 
             <div class="row">
-                    <div class="col-md-4 col-md-offset-4">
-                        <h2>Cloud Series</h2>
-                    </div>
+                <div class="col-md-8 col-md-offset-2">
+                    <h2>Cloud Series</h2>
+                </div>
             </div>
             <div class="row">
-                <div class="col-md-1 col-md-offset-4">
+                <div class="col-md-1 col-md-offset-2">
                     <img src="site/img/awssoluationarchitect.png" alt="AWS Certified Solution Architect - Associate" />
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <a href="Services/awssoluationarchitect"><h3>AWS Certified Solution Architect - Associate</h3></a>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-1 col-md-offset-4">
+                <div class="col-md-1 col-md-offset-2">
                     <img src="site/img/azuresolution.png" alt="Developing Azure Solution" />
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <a href="Services/azuresolution"> <h3>Developing Azure Solution</h3> </a>
                 </div>
             </div>
-         
+
             <div class="row">
-                <div class="col-md-4 col-md-offset-4">
-                <h2>.Net Development</h2>   
+                <div class="col-md-8 col-md-offset-2">
+                    <h2>.Net Development Series</h2>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-1 col-md-offset-4">
+                <div class="col-md-1 col-md-offset-2">
                     <img src="site/img/foundation.png" alt=".Net Foundation" />
                 </div>
                 <div class="col-md-5">
                     <a href="Services/foundation"><h3>.Net Foundation</h3></a>
                 </div>
-             </div>
+            </div>
 
-             <div class="row">
-                <div class="col-md-1 col-md-offset-4">
-                     <img src="site/img/mcts.png" alt=".Net MCTS" /> 
+            <div class="row">
+                <div class="col-md-1 col-md-offset-2">
+                    <img src="site/img/mcts.png" alt=".Net MCTS" />
                 </div>
                 <div class="col-md-5">
-                    <a href="Services/mcts"><h3>.Net MCTS</h3></a>
+                    <a href="course.html?course=.Net MCTS&root=mcts"><h3>.Net MCTS</h3></a>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-1 col-md-offset-4">
+                <div class="col-md-1 col-md-offset-2">
                     <img src="site/img/project.png" alt=".Net Project" />
                 </div>
                 <div class="col-md-5">
                     <a href="Services/mcts"><h3>.Net Project</h3></a>
                 </div>
+            </div>
         </div>
-
         <script>
             var app = angular.module('myApp', []);
             app.controller('customersCtrl', function ($scope, $http) {

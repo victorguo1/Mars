@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>From Zero to Hero: Cloud and more</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+    <style>
+        img {
+            height: 80px;
+            width: 80px;
+        }
+    </style>
+    <base href="/api/">
+</head>
+<body>
+    
+    <div class="container" ng-app="myApp" ng-controller="customersCtrl">        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h1>From Zero to Hero!</h1>
+                <div>{{user}}</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-1 col-md-offset-2">
+                <img src="site/img/{{root}}.png" />
+            </div>
+            <div class="col-md-5"><h2>{{course}}</h2>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <a href="" ng-click="myFunction()"><h4>{{root}}</h4></a>
+            </div>
+        </div>
+    </div>
+    <script>
+        var app = angular.module('myApp', []);
+        app.config(['$locationProvider', function ($locationProvider) {
+            $locationProvider.html5Mode(true);
+        }]);
+
+        app.controller('customersCtrl', function ($scope, $http, $location) {
+            $http.get("User").then(function (response) {
+                $scope.user = "Hello " + response.data + "!";
+            });
+
+            $scope.course = $location.search()['course'];
+            $scope.root = $location.search()['root'];
+
+            $scope.count = 0;
+            $scope.myFunction = function ($http) {
+                $http.get("Services").then(function (response) {
+                    $scope.user = "Hello " + response.data + "!";
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
