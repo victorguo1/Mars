@@ -61,15 +61,16 @@
             <div class="col-md-8 col-md-offset-2">
                 content {{dirOrFiles}}
 
-                <table>
-                    <tr ng-repeat="x in dirOrFiles">
-                        <td>{{ x.Name }}</td>
-                        <td>{{ x.Type }}</td>
-                        <td>{{ x.Size }}</td>
-                    </tr>
-                </table>
+               
             </div>
         </div>
+        <table>
+            <tr ng-repeat="x in dirOrFiles">
+                <td>{{x.Name}}</td>
+                <td>{{x.Type}}</td>
+                <td>{{x.Size}}</td>
+            </tr>
+        </table>
       </div>
             <script>
                 var app = angular.module('myApp', []);
