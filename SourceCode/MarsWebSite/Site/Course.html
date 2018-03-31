@@ -34,7 +34,7 @@
 </head>
 <body>
     
-    <div class="container" ng-app="myApp" ng-controller="customersCtrl">        
+    <div class="container" ng-app="myApp" ng-controller="customersCtrl">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <h1>From Zero to Hero!</h1>
@@ -46,42 +46,48 @@
             <div class="col-md-1 col-md-offset-2">
                 <img src="site/img/{{root}}.png" />
             </div>
-            <div class="col-md-5"><h2>{{course}}</h2>
+            <div class="col-md-5">
+                <h2>{{course}}</h2>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <a href="" ng-click="myFunction()"><h4>{{root}}</h4></a>
             </div>
         </div>
-        {{content}}
-    </div>
-    <script>
-        var app = angular.module('myApp', []);
-        app.config(['$locationProvider', function ($locationProvider) {
-            $locationProvider.html5Mode(true);
-        }]);
 
-        app.controller('customersCtrl', function ($scope, $http, $location) {
-            $http.get("User").then(function (response) {
-                $scope.user = "Hello " + response.data + "!";
-            });
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                content {{content}}
+            </div>
+        </div>
+      </div>
+            <script>
+                var app = angular.module('myApp', []);
+                app.config(['$locationProvider', function ($locationProvider) {
+                    $locationProvider.html5Mode(true);
+                }]);
 
-            $scope.course = $location.search()['course'];
-            $scope.root = $location.search()['root'];
+                app.controller('customersCtrl', function ($scope, $http, $location) {
+                    $http.get("User").then(function (response) {
+                        $scope.user = "Hello " + response.data + "!";
+                    });
 
-            $http.get("Services/" + $scope.root).then(function (response) {
-                $scope.content = response.data.records;
-            });
+                    $scope.course = $location.search()['course'];
+                    $scope.root = $location.search()['root'];
 
-            $scope.myFunction = function ($http) {
-                $http.get("Services/" + $scope.root).then(function (response) {
-                    $scope.user = "Hello " + response.data + "!";
+                    $http.get("Services/" + $scope.root).then(function (response) {
+                        $scope.content = response.data.records;
+                    });
+
+                    $scope.myFunction = function ($http) {
+                        $http.get("Services/" + $scope.root).then(function (response) {
+                            $scope.user = "Hello " + response.data + "!";
+                        });
+                    }
                 });
-            }
-        });
-    </script>
+            </script>
 </body>
 
 </html>
