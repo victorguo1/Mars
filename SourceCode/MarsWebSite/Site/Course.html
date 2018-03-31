@@ -78,7 +78,7 @@
                     $scope.root = $location.search()['root'];
 
                     $http.get("Services/" + $scope.root).then(function (response) {
-                        $scope.content = response.data.records;
+                        $scope.content = response.data;
                     });
 
                     $scope.myFunction = function ($http) {
