@@ -27,6 +27,9 @@
     <None Update="Site\azuresolution.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Site\Course.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Site\css\bootstrap.min.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
