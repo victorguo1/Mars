@@ -72,7 +72,7 @@
 
             $scope.count = 0;
             $scope.myFunction = function ($http) {
-                $http.get("Services").then(function (response) {
+                $http.get("Services/" + $scope.root).then(function (response) {
                     $scope.user = "Hello " + response.data + "!";
                 });
             }
