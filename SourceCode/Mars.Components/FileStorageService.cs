@@ -44,12 +44,12 @@ namespace Mars.Components
                 {
                     type = "directory";
                     name =  ((CloudFileDirectory)item).Name;
-                    path = shareFolder + "-" + name;
+                    path = shareFolder.Replace("/","-") + "-" + name;
                 }
                 else {
                     type = "file";
                     name = ((CloudFile)item).Name;
-                    path = shareFolder;
+                    path = shareFolder.Replace("/", "-");
                     size = ((CloudFile)item).Properties.Length.ToString();
 
                 }

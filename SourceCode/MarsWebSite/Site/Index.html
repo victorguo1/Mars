@@ -46,21 +46,13 @@
                     <h2>Cloud Series</h2>
                 </div>
             </div>
-            <div class="row">
+            
+            <div ng-repeat="x in courses | orderBy : 'PartitionKey' | lowercase | filter : '!.net'" class="row">
                 <div class="col-md-1 col-md-offset-2">
-                    <img src="site/img/awssoluationarchitect.png" alt="AWS Certified Solution Architect - Associate" />
+                    <img src="site/img/{{x.RowKey}}.png" alt="{{x.PartitionKey}}" />
                 </div>
                 <div class="col-md-5">
-                    <a href="Services/awssoluationarchitect"><h3>AWS Certified Solution Architect - Associate</h3></a>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-1 col-md-offset-2">
-                    <img src="site/img/azuresolution.png" alt="Developing Azure Solution" />
-                </div>
-                <div class="col-md-5">
-                    <a href="Services/azuresolution"> <h3>Developing Azure Solution</h3> </a>
+                    <a href="course.html?course={{x.PartitionKey}}&path={{x.RowKey}}"><h3>{{x.PartitionKey}}</h3></a>
                 </div>
             </div>
 
@@ -69,29 +61,12 @@
                     <h2>.Net Development Series</h2>
                 </div>
             </div>
-            <div class="row">
+            <div ng-repeat="x in courses | orderBy : 'PartitionKey' | lowercase | filter : '.net'"  class="row" >
                 <div class="col-md-1 col-md-offset-2">
-                    <img src="site/img/foundation.png" alt=".Net Foundation" />
+                    <img src="site/img/{{x.RowKey}}.png" alt="{{x.PartitionKey}}" />
                 </div>
                 <div class="col-md-5">
-                    <a href="Services/foundation"><h3>.Net Foundation</h3></a>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-1 col-md-offset-2">
-                    <img src="site/img/mcts.png" alt=".Net MCTS" />
-                </div>
-                <div class="col-md-5">
-                    <a href="course.html?course=.Net MCTS&root=mcts"><h3>.Net MCTS</h3></a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-1 col-md-offset-2">
-                    <img src="site/img/project.png" alt=".Net Project" />
-                </div>
-                <div class="col-md-5">
-                    <a href="Services/mcts"><h3>.Net Project</h3></a>
+                    <a href="course.html?course={{x.PartitionKey}}&path={{x.RowKey}}"><h3>{{x.PartitionKey}}</h3></a>
                 </div>
             </div>
         </div>
@@ -100,6 +75,10 @@
             app.controller('customersCtrl', function ($scope, $http) {
                 $http.get("User").then(function (response) {
                     $scope.user = "Hello " + response.data + "!";
+                });
+
+                $http.get("Courses").then(function (response) {
+                    $scope.courses = JSON.parse(response.data);
                 });
             });
         </script>

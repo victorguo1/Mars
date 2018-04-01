@@ -25,10 +25,10 @@ namespace MarsWebSite
             // if user is authenticated and authorized, otherwise return nothing           
             string email = UserManager.GetAuthenticatedEmail();
             log.Info(email);
-            if (email == null || email.Length == 0 ) {
-                log.Info("empty email.");
-                return req.CreateResponse(HttpStatusCode.OK, "", "application/json");
-            }
+            //if (email == null || email.Length == 0 ) {
+            //    log.Info("empty email.");
+            //    return req.CreateResponse(HttpStatusCode.OK, "", "application/json");
+            //}
 
             StorageService service = new StorageService();
             string list = service.ListFilesOrDirectories(name.Replace("-", "/"));
