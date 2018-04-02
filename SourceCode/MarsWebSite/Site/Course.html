@@ -30,6 +30,11 @@
             height: 80px;
             width: 80px;
         }
+
+        i {
+            font-size: 20px;
+            vertical-align: bottom;
+        }
     </style>
     <base href="/api/">
    
@@ -49,41 +54,42 @@
                 <img src="site/img/{{root}}.png" />  
             </div>
             <div class="col-md-9">
-                <h2>{{course}}</h2>
+                <h3>{{course}}</h3>
             </div>
         </div>
 
         <div class="row">
-            <div id="breadcrumb" class="col-md-8 col-md-offset-2">
-                <a ng-click="getSubfolders(path)">{{path}}/</a>                
+            <div class="col-md-1 col-md-offset-2" style="width:50px">
+                <a href="index.html?id=ok"> <i class="fas fa-home"></i> </a>
             </div>
+             
+            <div id="breadcrumb" class="col-md-7">start</div>
         </div>
-
         <div class="row" ng-repeat="x in dirOrFiles | orderBy : ['Type', 'Name'] ">
-            <ngif ng-if="x.Type == 'directory'">
-                <div class="col-md-1 col-md-offset-2 col-md-auto" style="width:50px">
-                    <i class="fas fa-folder-open" style="font-size:20px;"></i>                    
-                </div>
-                <div class="col-md-5">
-                    <a ng-click="getSubfolders(x.Path)"><h4> {{x.Name}}  </h4></a>
-                </div>
-                <div class="col-md-1">
-                    
-                </div>
-            </ngif>
-            <ngif ng-if="x.Type == 'file'" >
-                <div class="col-md-1 col-md-offset-2 col-md-auto" style="width:50px">                   
-                    <i class="far fa-file" style="font-size:24px;"></i>
-                </div>
-                <div class="col-md-5">
-                    <a href="getfile/{{x.Path}}/{{x.Name}}"><h4> {{x.Name}}  </h4></a>
-                </div>
-                <div class="col-md-1">
-                    <h4> {{x.Size}}  </h4>
-                </div>
-            </ngif>
-        </div>
-      </div> 
+                <ngif ng-if="x.Type == 'directory'">
+                    <div class="col-md-1 col-md-offset-2 col-md-auto" style="width:50px">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <div class="col-md-5">
+                        <a ng-click="getSubfolders(x.Path)"><h4> {{x.Name}}  </h4></a>
+                    </div>
+                    <div class="col-md-1">
+
+                    </div>
+                </ngif>
+                <ngif ng-if="x.Type == 'file'">
+                    <div class="col-md-1 col-md-offset-2 col-md-auto" style="width:50px">
+                        <i class="far fa-file"></i>
+                    </div>
+                    <div class="col-md-5">
+                        <a href="getfile/{{x.Path}}/{{x.Name}}"><h4> {{x.Name}}  </h4></a>
+                    </div>
+                    <div class="col-md-1">
+                        <h4> {{x.Size}}  </h4>
+                    </div>
+                </ngif>
+            </div>
+        </div> 
     
     <script>
          var app = angular.module('myApp', []);
@@ -91,7 +97,7 @@
              $locationProvider.html5Mode(true);
          }]);
 
-         app.controller('customersCtrl', function ($scope, $http, $location) {
+         app.controller('customersCtrl', function ($scope, $http, $location,$compile) {
              $http.get("User").then(function (response) {
                  $scope.user = "Hello " + response.data + "!";
              });
@@ -103,16 +109,17 @@
              $scope.folders = getFolders(path);
              
              $http.get("Services/" + path).then(function (response) {
-                 $scope.dirOrFiles = JSON.parse(response.data);
-                 appendBreadcrumb($scope.course, path);
+                 $scope.dirOrFiles = JSON.parse(response.data);                
              });
 
              $scope.getSubfolders = function (path) {
                 $http.get("Services/" + path).then(function (response) {
                     $scope.dirOrFiles = JSON.parse(response.data);
-                 });                
-                appendBreadcrumb($scope.course,path);
+                 });
+                 appendBreadcrumb($scope, $compile, path);
              } 
+
+             appendBreadcrumb($scope, $compile, path);
          });
 
 
@@ -126,28 +133,27 @@
              return folders;
          }
 
-         function appendBreadcrumb(course, path) {
+         function appendBreadcrumb(scope,compile, path) {
+             var course = scope.course;
              var folders = path.split("-");
-
+             
              //Get the element that we want to append to
-             var divRoot = document.getElementById("breadcrumb");
-             divRoot.innerHTML = "";
+             var divRoot = angular.element(document.getElementById("breadcrumb"));
+             divRoot.empty();
              var currentLink = folders[0];
              for (i = 0; i < folders.length; i++) {
-                 //Create the new <a>                 
-                 var subLink = document.createElement("a");
-                 //subLink.href = "course.html?course=" + course + "&path=" + currentLink ;
-                 subLink.setAttribute("ng-click", "getSubfolders('" + currentLink + "')");
+                 var linkHtml;
+                 if (i < folders.length - 1 ) { 
+                    linkHtml = "<a ng-click='getSubfolders(&apos;" + currentLink + "&apos;)'>" + folders[i] + " / " + "</a> ";
+                 } else {
+                     linkHtml = "<span>" + folders[i] + "</span>";
+                 }
+                 var subLink = angular.element(linkHtml);
+                 divRoot.append(subLink);
 
-                 //Create a text node to hold the text of the <a>
-                 var aElemTN = document.createTextNode(folders[i] + " / ");
-                 //Append the <a> text node to the <a> element
-                 subLink.appendChild(aElemTN);
-                 //Append the new link to the existing <div>
-                 divRoot.appendChild(subLink);
-
-                 currentLink = currentLink + "-" + folders[i + 1];
+                 currentLink = currentLink + "-" + folders[i + 1];                 
              }
+             compile(divRoot.contents())(scope);
          }
     </script>
 </body>
