@@ -55,11 +55,12 @@ namespace MarsWebSite
                 var result = new HttpResponseMessage(HttpStatusCode.OK);
 
                 result.Content = new StreamContent(stream);
-                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                {
-                    FileName = file
-                };
-                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("inline");
+
+                string fileType = System.IO.Path.GetExtension(file);
+                string contentType = MimeTypeMap.GetMimeType(fileType);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+
                 return result;
             }
             else {

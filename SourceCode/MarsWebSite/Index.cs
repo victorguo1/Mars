@@ -8,6 +8,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 
 using System.Net.Http.Headers;
+using MarsWebSite.Components;
 
 namespace MarsWebSite
 {
@@ -56,23 +57,25 @@ namespace MarsWebSite
 
             string contentType = "text/html";
 
-            string fileType = System.IO.Path.GetExtension(file).Remove(0, 1).ToLower();
-            switch (fileType)
-            {
-                case "png":
-                case "img":
-                case "jpg":
-                case "jpeg":
-                case "gif":
-                    contentType = "image/" + fileType; break;
-                case "css":
-                    contentType = "text/css"; break;
-                case "js":
-                    contentType = "text/javascript"; break;
-                default:
-                    break;
-            }
-             
+            string fileType = System.IO.Path.GetExtension(file); //.Remove(0, 1).ToLower();
+            contentType = MimeTypeMap.GetMimeType(fileType);
+            #region replaced by better code. 
+            //switch (fileType)
+            //{
+            //    case "png":
+            //    case "img":
+            //    case "jpg":
+            //    case "jpeg":
+            //    case "gif":
+            //        contentType = "image/" + fileType; break;
+            //    case "css":
+            //        contentType = "text/css"; break;
+            //    case "js":
+            //        contentType = "text/javascript"; break;
+            //    default:
+            //        break;
+            //}
+            #endregion 
             log.Info("content type is " + contentType);
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
