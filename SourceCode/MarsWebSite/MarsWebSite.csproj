@@ -2,6 +2,13 @@
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Site\css\bootstrap.min.css" />
+    <None Remove="Site\css\bootstrap.min.js" />
+    <None Remove="Site\css\font-awesome.min.css" />
+    <None Remove="Site\css\metisMenu.min.css" />
+    <None Remove="Site\css\site.css" />
+  </ItemGroup>
   <ItemGroup>    
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.9" />    
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />    
@@ -28,21 +35,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Site\Course.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Site\css\bootstrap.min.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Site\css\bootstrap.min.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Site\css\font-awesome.min.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Site\css\metisMenu.min.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Site\css\site.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Site\dotnetdevelopment.png">
@@ -81,5 +73,8 @@
     <None Update="Site\project.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Site\css\" />
   </ItemGroup>
 </Project>
