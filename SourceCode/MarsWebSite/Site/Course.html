@@ -20,6 +20,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
     <style>
+        h1 {
+            font-size: 24px;
+            color: #08a3ca;
+        }
         .fileImage {
             height: 50px;
             width: 50px;
@@ -32,6 +36,13 @@
 
         .floating-box {
             display: inline-block;
+        }
+
+        .narrow-padding {
+            padding-top: 5px;
+            padding-left: 1px;
+            padding-right: 1px;
+            padding-bottom: 5px;
         }
     </style>
     <base href="/api/">
@@ -65,13 +76,13 @@
         </div>
         <div class="row" ng-repeat="x in dirOrFiles | orderBy : ['Type', 'Name'] ">
                 <ngif ng-if="x.Type == 'directory'">
-                    <div class="col-xs-1" style="width:30px">
+                    <div class="col-xs-1" style="width:45px">
                         <i class="fas fa-folder-open"></i>
                     </div>
-                    <div class="col-xs-5">
-                        <a class="floating-box" ng-click="getSubfolders(x.Path)">{{x.Name}} </a><img class="floating-box" src="site/img/{{x.IsRecent}}.png"  />
+                    <div class="col-xs-5 narrow-padding">
+                        <a class="floating-box " ng-click="getSubfolders(x.Path)">{{x.Name}} </a><img class="floating-box" src="site/img/{{x.IsRecent}}.png"  />
                     </div>
-                    <div class="col-xs-3">
+                    <div class="col-xs-3 narrow-padding">
                         {{x.LastModifiedDate}}
                     </div>
                     <div class="col-xs-3">
@@ -79,16 +90,16 @@
                     </div>
                 </ngif>
                 <ngif ng-if="x.Type == 'file'">
-                    <div class="col-xs-1" style="width:30px">
+                    <div class="col-xs-1" style="width:45px">
                         <i class="far fa-file" ></i> 
                     </div>
-                    <div class="col-xs-5">
+                    <div class="col-xs-5 narrow-padding">
                         <a class="floating-box" href="getfile/{{x.Path}}/{{x.Name}}" target="_blank">{{x.Name}} </a>&nbsp;&nbsp; <img class="floating-box" src="site/img/{{x.IsRecent}}.png" /> 
                     </div>
-                    <div class="col-xs-3">
+                    <div class="col-xs-3 narrow-padding">
                         {{x.LastModifiedDate}}
                     </div>
-                    <div class="col-xs-3">
+                    <div class="col-xs-3 narrow-padding">
                          {{x.Size}}   
                     </div>
                 </ngif>
