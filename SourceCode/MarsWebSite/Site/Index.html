@@ -29,43 +29,48 @@
         img {
             height: 80px;
             width: 80px;
-        } 
+        }
+
+        i {
+            font-size: 20px;
+            vertical-align: middle;
+        }
     </style>
 </head>
     <body>       
         <div class="container" ng-app="myApp" ng-controller="customersCtrl">
             <div class="row">
-                <div class="col-md-8 col-md-offset-2">
+                <div class="col-xs-8 col-xs-offset-1">
                     <h1>From Zero to Hero!</h1>
                     <div>{{user}}</div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-8 col-md-offset-2">
+                <div class="col-xs-8 col-xs-offset-1">
                     <h2>Cloud Series</h2>
                 </div>
             </div>
             
             <div ng-repeat="x in courses | orderBy : 'PartitionKey' | lowercase | filter : '!.net'" class="row">
-                <div class="col-md-1 col-md-offset-2">
+                <div class="col-xs-1 col-xs-offset-1">
                     <img src="site/img/{{x.RowKey}}.png" alt="{{x.PartitionKey}}" />
                 </div>
-                <div class="col-md-5">
+                <div class="col-xs-5">
                     <a href="course.html?course={{x.PartitionKey}}&path={{x.RowKey}}"><h3>{{x.PartitionKey}}</h3></a>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-8 col-md-offset-2">
+                <div class="col-xs-8 col-xs-offset-1">
                     <h2>.Net Development Series</h2>
                 </div>
             </div>
             <div ng-repeat="x in courses | orderBy : 'PartitionKey' | lowercase | filter : '.net'"  class="row" >
-                <div class="col-md-1 col-md-offset-2">
+                <div class="col-xs-1 col-xs-offset-1">
                     <img src="site/img/{{x.RowKey}}.png" alt="{{x.PartitionKey}}" />
                 </div>
-                <div class="col-md-5">
+                <div class="col-xs-5">
                     <a href="course.html?course={{x.PartitionKey}}&path={{x.RowKey}}"><h3>{{x.PartitionKey}}</h3></a>
                 </div>
             </div>

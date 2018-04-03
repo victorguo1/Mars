@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage.File; // Namespace for Azure Files
 using Microsoft.WindowsAzure.Storage.Auth;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace Mars.Components
 {
@@ -26,13 +27,15 @@ namespace Mars.Components
         {           
             var share = _sasClient.GetShareReference(shareFolder);
             var rootDirectory = share.GetRootDirectoryReference();
-            var dirs = rootDirectory.ListFilesAndDirectories();           
+            var dirs = rootDirectory.ListFilesAndDirectories( );  
+            
             var list = dirs.ToList<IListFileItem>();
 
             string type = string.Empty;
             string size = string.Empty;
             string name = string.Empty;
             string path = string.Empty;
+            string isRecent = string.Empty;
 
             string lastModifiedDate = string.Empty;
 
@@ -42,31 +45,53 @@ namespace Mars.Components
             {
                 if (item is CloudFileDirectory)
                 {
+                    var directory = ((CloudFileDirectory)item);
+                    directory.FetchAttributes();
                     type = "directory";
-                    name =  ((CloudFileDirectory)item).Name;
+                    name =  directory.Name;
                     path = shareFolder.Replace("/","-") + "-" + name;
+                    lastModifiedDate = directory.Properties.LastModified.HasValue ?
+                        directory.Properties.LastModified.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : string.Empty;
+                    if (lastModifiedDate != string.Empty)
+                    {
+                        isRecent = IsRecentlyUpdated(directory.Properties.LastModified.Value).ToString();
+                    }
                 }
                 else {
+                    var file = ((CloudFile)item);
+                    file.FetchAttributes();
                     type = "file";
-                    name = ((CloudFile)item).Name;
+                    name = file.Name;
                     path = shareFolder.Replace("/", "-");
-                    size = ((CloudFile)item).Properties.Length.ToString();
-
+                    size = file.Properties.Length.ToByteSize();
+                    lastModifiedDate = file.Properties.LastModified.HasValue ? 
+                        file.Properties.LastModified.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : string.Empty ;
+                    if (lastModifiedDate != string.Empty) {
+                        isRecent = IsRecentlyUpdated(file.Properties.LastModified.Value).ToString();
+                    }
                 }
-                lastModifiedDate = item.Share.Properties.LastModified.HasValue ? item.Share.Properties.LastModified.Value.DateTime.ToString() :
-                    string.Empty;
 
                 content[i++] = new
                 {
                     Name = name,
-                    Link = item.Uri.ToString(),
                     Type = type,
                     LastModifiedDate = lastModifiedDate,
                     Size = size,
-                    Path = path
+                    Path = path,
+                    IsRecent = isRecent                    
                 };
             }
             return content;
+        }
+
+        private bool IsRecentlyUpdated(DateTimeOffset dt) {
+            bool isRecently= false;
+
+            if (dt.AddDays(14) > DateTime.Now) {
+                isRecently = true;
+            }
+
+            return isRecently;
         }
 
         public CloudFile GetFile(string shareFolder, string fileName) {

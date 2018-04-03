@@ -26,14 +26,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
     <style>
-        img {
+        .fileImage {
             height: 80px;
             width: 80px;
         }
 
         i {
             font-size: 20px;
-            vertical-align: bottom;
+            vertical-align: middle;
+        }
+
+        .floating-box {
+            display: inline-block;
         }
     </style>
     <base href="/api/">
@@ -43,48 +47,54 @@
     
     <div class="container" ng-app="myApp" ng-controller="customersCtrl">
         <div class="row">
-            <div class="col-md-10 col-md-offset-2">
+            <div class="col-xs-10 col-xs-offset-1">
                 <h1>From Zero to Hero!</h1>
                 <div>{{user}}</div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-1 col-md-offset-2">
-                <img src="site/img/{{root}}.png" />  
+            <div class="col-xs-1 col-xs-offset-1">
+                <img class="fileImage" src="site/img/{{root}}.png" />  
             </div>
-            <div class="col-md-9">
+            <div class="col-xs-9">
                 <h3>{{course}}</h3>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-1 col-md-offset-2" style="width:50px">
+            <div class="col-xs-1 col-xs-offset-1" style="width:50px">
                 <a href="index" target="_self"> <i class="fas fa-home"></i> </a>
             </div>
              
-            <div id="breadcrumb" class="col-md-7">start</div>
+            <div id="breadcrumb" class="col-xs-7">start</div>
         </div>
         <div class="row" ng-repeat="x in dirOrFiles | orderBy : ['Type', 'Name'] ">
                 <ngif ng-if="x.Type == 'directory'">
-                    <div class="col-md-1 col-md-offset-2 col-md-auto" style="width:50px">
+                    <div class="col-xs-1 col-xs-offset-1 col-xs-auto" style="width:30px">
                         <i class="fas fa-folder-open"></i>
                     </div>
-                    <div class="col-md-5">
-                        <a ng-click="getSubfolders(x.Path)"><h4> {{x.Name}}  </h4></a>
+                    <div class="col-xs-5">
+                        <a class="floating-box" ng-click="getSubfolders(x.Path)"><h4> {{x.Name}}  </h4></a><img class="floating-box" src="site/img/{{x.IsRecent}}.png"  />
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-xs-2" style="text-align:left">
+                        <h4> {{x.LastModifiedDate}}  </h4>
+                    </div>
+                    <div class="col-xs-1">
 
                     </div>
                 </ngif>
                 <ngif ng-if="x.Type == 'file'">
-                    <div class="col-md-1 col-md-offset-2 col-md-auto" style="width:50px">
-                        <i class="far fa-file"></i>
+                    <div class="col-xs-1 col-xs-offset-1 col-xs-auto" style="width:30px">
+                        <i class="far fa-file" ></i> 
                     </div>
-                    <div class="col-md-5">
-                        <a href="getfile/{{x.Path}}/{{x.Name}}" target="_self"><h4> {{x.Name}}  </h4></a>
+                    <div class="col-xs-5">
+                        <a class="floating-box" href="getfile/{{x.Path}}/{{x.Name}}" target="_blank"><h4>{{x.Name}}</h4></a>&nbsp;&nbsp; <img class="floating-box" src="site/img/{{x.IsRecent}}.png" /> 
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-xs-2" style="text-align:left">
+                        <h4> {{x.LastModifiedDate}}  </h4>
+                    </div>
+                    <div class="col-xs-2">
                         <h4> {{x.Size}}  </h4>
                     </div>
                 </ngif>
