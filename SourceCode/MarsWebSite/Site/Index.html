@@ -44,9 +44,15 @@
     <body>       
         <div style="margin-left:10px" class="container" ng-app="myApp" ng-controller="customersCtrl">
             <div class="row">
-                <div class="col-xs-8">
-                    <h1>From Zero to Hero!</h1>
-                    <div>{{user}}</div>
+                <div class="col-xs-12">
+                    <h1>From Zero to Hero!</h1>                  
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div>Hello {{user}}!</div>
+                    <div ng-if="user==''"><a href="/.auth/logout?post_login_redirect_uri=EndSession">Logout</a></div>
+                    <div ng-if="!user==''"><a href="/.auth/login/microsoftaccount/callback">Login</a></div>
                 </div>
             </div>
 
@@ -83,7 +89,7 @@
             var app = angular.module('myApp', []);
             app.controller('customersCtrl', function ($scope, $http) {
                 $http.get("User").then(function (response) {
-                    $scope.user = "Hello " + response.data + "!";
+                    $scope.user = response.data.trim();
                 });
 
                 $http.get("Courses").then(function (response) {

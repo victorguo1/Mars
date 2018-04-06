@@ -25,10 +25,6 @@ namespace MarsWebSite
             // if user is authenticated and authorized, otherwise return nothing           
             string email = UserManager.GetAuthenticatedEmail();
             log.Info(email);
-            //if (email == null || email.Length == 0 ) {
-            //    log.Info("empty email.");
-            //    return req.CreateResponse(HttpStatusCode.OK, "", "application/json");
-            //}
 
             StorageService service = new StorageService();
             string list = service.ListFilesOrDirectories(name.Replace("-", "/"));
@@ -52,19 +48,24 @@ namespace MarsWebSite
                 System.IO.MemoryStream stream = new System.IO.MemoryStream();
                 content.DownloadToStream(stream, null);
                 stream.Seek(0, System.IO.SeekOrigin.Begin);
-                var result = new HttpResponseMessage(HttpStatusCode.OK);
+                var response = new HttpResponseMessage(HttpStatusCode.OK);
 
-                result.Content = new StreamContent(stream);
-                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("inline");
+                response.Content = new StreamContent(stream);
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("inline");
 
                 string fileType = System.IO.Path.GetExtension(file);
                 string contentType = MimeTypeMap.GetMimeType(fileType);
-                result.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
 
-                return result;
+                return response;
             }
             else {
-                return req.CreateResponse(HttpStatusCode.OK, "Access Denied");
+                //return req.CreateResponse(HttpStatusCode.OK, "Access Denied");
+                var response = req.CreateResponse();
+                response.Headers.Add("location", "/.auth/login/microsoftaccount/callback");
+                response.StatusCode = HttpStatusCode.Redirect;
+                
+                return response;
             }
         }
 
@@ -99,6 +100,20 @@ namespace MarsWebSite
             log.Info(user);                         
 
             return req.CreateResponse(HttpStatusCode.OK, user);
-        }       
+        }
+
+        [FunctionName("EndSession")]
+        public static HttpResponseMessage EndSession([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Services/{name}")]HttpRequestMessage req, string name, TraceWriter log)
+        {
+            var response = req.CreateResponse();
+            response.Headers.Add("location", "/");
+            response.StatusCode = HttpStatusCode.Redirect;
+
+            var authSession = new CookieHeaderValue("AppServiceAuthSession", string.Empty);
+            var cookies = new CookieHeaderValue[] { authSession };
+            response.Headers.AddCookies( cookies);
+
+            return response;
+        }
     }
 }

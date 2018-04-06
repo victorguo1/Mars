@@ -56,26 +56,8 @@ namespace MarsWebSite
             response.Content = new StreamContent(stream);
 
             string contentType = "text/html";
-
             string fileType = System.IO.Path.GetExtension(file); //.Remove(0, 1).ToLower();
-            contentType = MimeTypeMap.GetMimeType(fileType);
-            #region replaced by better code. 
-            //switch (fileType)
-            //{
-            //    case "png":
-            //    case "img":
-            //    case "jpg":
-            //    case "jpeg":
-            //    case "gif":
-            //        contentType = "image/" + fileType; break;
-            //    case "css":
-            //        contentType = "text/css"; break;
-            //    case "js":
-            //        contentType = "text/javascript"; break;
-            //    default:
-            //        break;
-            //}
-            #endregion 
+            contentType = MimeTypeMap.GetMimeType(fileType);         
             log.Info("content type is " + contentType);
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
