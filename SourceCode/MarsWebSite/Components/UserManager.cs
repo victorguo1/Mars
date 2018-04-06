@@ -35,5 +35,9 @@ namespace MarsWebSite.Components
             }
             return user;
         }
+
+        public static bool IsAutenticated() {
+            return System.Security.Claims.ClaimsPrincipal.Current.Identity.IsAuthenticated;
+        }
     }
 }

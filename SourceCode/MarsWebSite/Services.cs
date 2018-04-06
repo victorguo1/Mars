@@ -44,33 +44,42 @@ namespace MarsWebSite
             StorageService service = new StorageService();
             log.Info(email);
 
-            if (service.IsAllowDownload(email, path))
+            if (!UserManager.IsAutenticated())
             {
-                log.Info("IsAllowDownload == true "  + email + " " + path);
-                var content = service.GetContent(path, file);
-                System.IO.MemoryStream stream = new System.IO.MemoryStream();
-                content.DownloadToStream(stream, null);
-                stream.Seek(0, System.IO.SeekOrigin.Begin);
-                var response = new HttpResponseMessage(HttpStatusCode.OK);
+                // redirect to login
+                log.Info("redirect to login .");
+                var response = req.CreateResponse();
 
-                response.Content = new StreamContent(stream);
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("inline");
-
-                string fileType = System.IO.Path.GetExtension(file);
-                string contentType = MimeTypeMap.GetMimeType(fileType);
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+                response.Headers.Add("location", "/.auth/login/microsoftaccount?post_login_redirect_uri=" + req.RequestUri.AbsoluteUri);
+                response.StatusCode = HttpStatusCode.Redirect;
 
                 return response;
             }
             else {
-                log.Info("IsAllowDownload == false " + email + " " + path);
-                //return req.CreateResponse(HttpStatusCode.OK, "Access Denied");
-                var response = req.CreateResponse();
-                 
-                response.Headers.Add("location", "/.auth/login/microsoftaccount/callback?post_login_redirect_uri=" + req.RequestUri.AbsoluteUri);
-                response.StatusCode = HttpStatusCode.Redirect;
-                
-                return response;
+                // authenticated user, check if it's allowed to access this folder
+                if (service.IsAllowDownload(email, path))
+                {
+                    log.Info("IsAllowDownload == true " + email + " " + path);
+                    var content = service.GetContent(path, file);
+                    System.IO.MemoryStream stream = new System.IO.MemoryStream();
+                    content.DownloadToStream(stream, null);
+                    stream.Seek(0, System.IO.SeekOrigin.Begin);
+                    var response = new HttpResponseMessage(HttpStatusCode.OK);
+
+                    response.Content = new StreamContent(stream);
+                    response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("inline");
+
+                    string fileType = System.IO.Path.GetExtension(file);
+                    string contentType = MimeTypeMap.GetMimeType(fileType);
+                    response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+
+                    return response;
+                }
+                else
+                {
+                    log.Info("IsAllowDownload == false " + email + " " + path);
+                    return req.CreateResponse(HttpStatusCode.OK, "Access Denied");
+                }
             }
         }
 
@@ -115,11 +124,36 @@ namespace MarsWebSite
             var response = req.CreateResponse();
             response.Headers.Add("location", "/index");
             response.StatusCode = HttpStatusCode.Redirect;
+    
+            try
+            {
+                if (req.Headers != null)
+                {
+                    //remove claims header
+                    foreach (var header in req.Headers)
+                    {
+                        if (header.Key.Contains("X-MS-TOKEN-"))
+                        {
+                            response.Headers.Remove(header.Key);
+                        }
+                    }
 
-            var authSession = new CookieHeaderValue("AppServiceAuthSession", string.Empty);
-            var cookies = new CookieHeaderValue[] { authSession };
-            response.Headers.AddCookies( cookies);
-
+                    //remove cookies
+                    var reqCookies = req.Headers.GetCookies();
+                    CookieHeaderValue[] respCookies;
+                    if (reqCookies != null) {
+                        respCookies = new CookieHeaderValue[reqCookies.Count];
+                        for (int i = 0; i < reqCookies.Count; i++) {
+                            respCookies[i] = new CookieHeaderValue(reqCookies[i].Cookies[0].Name, reqCookies[i].Cookies[0].Value);
+                            respCookies[i].Expires =  DateTime.Now.AddDays(-5);
+                        }
+                        response.Headers.AddCookies(respCookies);
+                    }
+                }
+            }
+            catch {
+                log.Error("removing claims header/cookie error");
+            }
             return response;
         }
     }
