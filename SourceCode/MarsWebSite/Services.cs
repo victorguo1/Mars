@@ -132,9 +132,11 @@ namespace MarsWebSite
                     //remove claims header
                     foreach (var header in req.Headers)
                     {
+                        log.Info("Header " + header.Key);
                         if (header.Key.Contains("X-MS-TOKEN-"))
                         {
                             response.Headers.Remove(header.Key);
+                            log.Info("removed the header " + header.Key);
                         }
                     }
 
@@ -146,6 +148,7 @@ namespace MarsWebSite
                         for (int i = 0; i < reqCookies.Count; i++) {
                             respCookies[i] = new CookieHeaderValue(reqCookies[i].Cookies[0].Name, reqCookies[i].Cookies[0].Value);
                             respCookies[i].Expires =  DateTime.Now.AddDays(-5);
+                            log.Info("expire cookie " + reqCookies[i].Cookies[0].Name);
                         }
                         response.Headers.AddCookies(respCookies);
                     }
