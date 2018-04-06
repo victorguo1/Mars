@@ -43,6 +43,9 @@
     <None Update="Site\foundation.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Site\Header.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Site\img\awssoluationarchitect.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
