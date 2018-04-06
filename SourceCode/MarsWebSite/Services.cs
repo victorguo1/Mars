@@ -20,7 +20,8 @@ namespace MarsWebSite
         /// <param name="log"></param>
         /// <returns></returns>
         [FunctionName("Services")]
-        public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Services/{name}")]HttpRequestMessage req, string name, TraceWriter log)
+        public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", 
+            Route = "Services/{name}")]HttpRequestMessage req, string name, TraceWriter log)
         {
             // if user is authenticated and authorized, otherwise return nothing           
             string email = UserManager.GetAuthenticatedEmail();
@@ -41,9 +42,11 @@ namespace MarsWebSite
             path = path.Replace("-", "/");
             string email = UserManager.GetAuthenticatedEmail();
             StorageService service = new StorageService();
+            log.Info(email);
 
             if (service.IsAllowDownload(email, path))
             {
+                log.Info("IsAllowDownload == true "  + email + " " + path);
                 var content = service.GetContent(path, file);
                 System.IO.MemoryStream stream = new System.IO.MemoryStream();
                 content.DownloadToStream(stream, null);
@@ -60,9 +63,11 @@ namespace MarsWebSite
                 return response;
             }
             else {
+                log.Info("IsAllowDownload == false " + email + " " + path);
                 //return req.CreateResponse(HttpStatusCode.OK, "Access Denied");
                 var response = req.CreateResponse();
-                response.Headers.Add("location", "/.auth/login/microsoftaccount/callback");
+                 
+                response.Headers.Add("location", "/.auth/login/microsoftaccount/callback?post_login_redirect_uri=" + req.RequestUri.AbsoluteUri);
                 response.StatusCode = HttpStatusCode.Redirect;
                 
                 return response;
@@ -91,7 +96,6 @@ namespace MarsWebSite
            [HttpTrigger(AuthorizationLevel.Anonymous, "get",
             Route = "User")]HttpRequestMessage req, TraceWriter log)
         {
-
             string user = UserManager.GetAuthenticatedUser();
             if (user == null)
             {
@@ -103,10 +107,13 @@ namespace MarsWebSite
         }
 
         [FunctionName("EndSession")]
-        public static HttpResponseMessage EndSession([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Services/EndSession")]HttpRequestMessage req, string name, TraceWriter log)
+        public static HttpResponseMessage EndSession(
+            [HttpTrigger(AuthorizationLevel.Anonymous, 
+            "get", Route = "EndSession")]HttpRequestMessage req, 
+            TraceWriter log)
         {
             var response = req.CreateResponse();
-            response.Headers.Add("location", "/");
+            response.Headers.Add("location", "/index");
             response.StatusCode = HttpStatusCode.Redirect;
 
             var authSession = new CookieHeaderValue("AppServiceAuthSession", string.Empty);
