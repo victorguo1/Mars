@@ -49,10 +49,12 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-xs-4">
                     <div>Hello {{user}}!</div>
-                    <div ng-if="user==''"><a href="/.auth/logout?post_login_redirect_uri=EndSession">Logout</a></div>
-                    <div ng-if="!user==''"><a href="/.auth/login/microsoftaccount/callback">Login</a></div>
+                </div>
+                <div class="col-xs-8">
+                    <div ng-if="user==''"><a href="/.auth/login/microsoftaccount/callback">Login</a></div>
+                    <div ng-if="!user==''"><a href="/.auth/logout?post_login_redirect_uri=EndSession">Logout</a></div>
                 </div>
             </div>
 

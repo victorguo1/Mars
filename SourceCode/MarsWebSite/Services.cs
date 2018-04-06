@@ -103,7 +103,7 @@ namespace MarsWebSite
         }
 
         [FunctionName("EndSession")]
-        public static HttpResponseMessage EndSession([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Services/{name}")]HttpRequestMessage req, string name, TraceWriter log)
+        public static HttpResponseMessage EndSession([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Services/EndSession")]HttpRequestMessage req, string name, TraceWriter log)
         {
             var response = req.CreateResponse();
             response.Headers.Add("location", "/");
