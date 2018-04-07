@@ -10,18 +10,22 @@ namespace MarsWebSite
 {
     public static class Courses
     {
+        private static SimpleCache _cache;
+        static Courses() {
+            _cache = new SimpleCache();
+        }
         [FunctionName("Courses")]
         public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", 
             Route = "courses")]HttpRequestMessage req, TraceWriter log)
         {
             log.Info("Courses Request");
 
-            string course = (string) SimpleCache.Get("GetCourses");
+            string course = (string)_cache.Get("GetCourses");
             if ( course == null)
             {
                 StorageService service = new StorageService();
                 course = service.GetCourses();
-                SimpleCache.Add("GetCourses", 10, course);
+                _cache.Add("GetCourses", 10, course);
                 log.Info("course refresh");
             }
 

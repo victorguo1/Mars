@@ -12,6 +12,12 @@ namespace MarsWebSite
 {
     public static class Services
     {
+        private static SimpleCache _cache;
+        static Services()
+        {
+            _cache = new SimpleCache();
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -27,12 +33,12 @@ namespace MarsWebSite
             string email = UserManager.GetAuthenticatedEmail();
             log.Info(email);
 
-            string list = (string)SimpleCache.Get(name);
+            string list = (string)_cache.Get(name);
             if (list == null)
             {
                 StorageService service = new StorageService();
                 list = service.ListFilesOrDirectories(name.Replace("-", "/"));
-                SimpleCache.Add(name, 10, list);
+                _cache.Add(name, 10, list);
                 log.Info("course folder refresh");
             }
 
