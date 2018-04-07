@@ -16,8 +16,15 @@ namespace MarsWebSite
         {
             log.Info("Courses Request");
 
-            StorageService service = new StorageService();
-            string course = service.GetCourses();
+            string course = (string) SimpleCache.Get("GetCourses");
+            if ( course == null)
+            {
+                StorageService service = new StorageService();
+                course = service.GetCourses();
+                SimpleCache.Add("GetCourses", 10, course);
+                log.Info("course refresh");
+            }
+
             // Fetching the name from the path parameter in the request URL
             return req.CreateResponse(HttpStatusCode.OK, course, "application/json");
         }

@@ -20,15 +20,22 @@ namespace MarsWebSite
         /// <param name="log"></param>
         /// <returns></returns>
         [FunctionName("Services")]
-        public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", 
+        public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Anonymous, "get",
             Route = "Services/{name}")]HttpRequestMessage req, string name, TraceWriter log)
         {
             // if user is authenticated and authorized, otherwise return nothing           
             string email = UserManager.GetAuthenticatedEmail();
             log.Info(email);
 
-            StorageService service = new StorageService();
-            string list = service.ListFilesOrDirectories(name.Replace("-", "/"));
+            string list = (string)SimpleCache.Get(name);
+            if (list == null)
+            {
+                StorageService service = new StorageService();
+                list = service.ListFilesOrDirectories(name.Replace("-", "/"));
+                SimpleCache.Add(name, 10, list);
+                log.Info("course folder refresh");
+            }
+
             // Fetching the name from the path parameter in the request URL
             return req.CreateResponse(HttpStatusCode.OK, list, "application/json");
         }
