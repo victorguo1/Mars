@@ -38,7 +38,9 @@ namespace MarsWebSite
             {
                 StorageService service = new StorageService();
                 list = service.ListFilesOrDirectories(name.Replace("-", "/"));
-                _cache.Add(name, 10, list);
+
+                int fileCacheInMinutes = AppSettings.FolderCacheInMinutes;
+                _cache.Add(name,fileCacheInMinutes, list);
                 log.Info("course folder refresh");
             }
 

@@ -25,5 +25,14 @@ namespace MarsWebSite
         {
             get { return GetEnvironmentVariable("CourseSASToken"); }
         }
+
+        public static int CourseCacheInMinutes {
+            get { return int.Parse(GetEnvironmentVariable("CourseCacheInMinutes")); }
+        }
+
+        public static int FolderCacheInMinutes
+        {
+            get { return int.Parse(GetEnvironmentVariable("FolderCacheInMinutes")); }
+        }
     }
 }

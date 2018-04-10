@@ -25,7 +25,8 @@ namespace MarsWebSite
             {
                 StorageService service = new StorageService();
                 course = service.GetCourses();
-                _cache.Add("GetCourses", 10, course);
+                int cacheInMinutes = AppSettings.CourseCacheInMinutes;
+                _cache.Add("GetCourses", cacheInMinutes, course);
                 log.Info("course refresh");
             }
 
