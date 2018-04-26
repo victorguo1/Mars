@@ -72,6 +72,7 @@
             </div>
             <div class="col-xs-9">
                 <b>{{course}}</b>
+                <i ng-if="isEnrolled" class="fa fa-registered"></i>
             </div>
         </div>
 
@@ -126,6 +127,7 @@
              });
 
              $scope.course = $location.search()['course'];
+             $scope.isEnrolled = JSON.parse($location.search()['isEnrolled']);
              var path = $location.search()['path'];
              $scope.path = path;
              $scope.root = getRoot(path);
