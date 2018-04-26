@@ -14,15 +14,17 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
+
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <style>
         h1 {
             font-size: 24px;
             color: #08a3ca;
         }
+
         img {
             height: 50px;
             width: 50px;
@@ -51,12 +53,15 @@
                 </div>
             </div>
             
-            <div ng-repeat="x in courses | orderBy : 'PartitionKey' | lowercase | filter : '!.net'" class="row"  >
-                <div class="col-xs-1"  style=" width:50px">
-                    <img src="site/img/{{x.RowKey}}.png" alt="{{x.PartitionKey}}" />
+            <div ng-repeat="course in courses | orderBy : 'name' | lowercase | filter : '!.net'" class="row">
+                <div class="col-xs-1" style="width:15px">
+                    <i ng-if="course.isEnrolled" class="fa fa-registered"></i>
+                </div>
+                <div class="pull-left" style=" width:50px">
+                    <img src="site/img/{{course.key}}.png" alt="{{course.name}}" />
                 </div>
                 <div class="col-xs-8">
-                    <a href="course.html?course={{x.PartitionKey}}&path={{x.RowKey}}"> {{x.PartitionKey}} </a>
+                    <a href="course.html?course={{course.name}}&path={{course.key}}"> {{course.name}} </a>
                 </div>
             </div>
 
@@ -65,24 +70,44 @@
                     <b>.Net Development Series</b>
                 </div>
             </div>
-            <div ng-repeat="x in courses | orderBy : 'PartitionKey' | lowercase | filter : '.net'"  class="row" >
-                <div class="col-xs-1"  style=" width:50px">
-                    <img src="site/img/{{x.RowKey}}.png" alt="{{x.PartitionKey}}" />
+            <div ng-repeat="course in courses | orderBy : 'name' | lowercase | filter : '.net'" class="row">
+                <div class="col-xs-1" style="width:15px">
+                    <i ng-if="course.isEnrolled" class="fa fa-registered"></i>
+                </div>
+                <div class="pull-left" style="width:50px">
+                    <img src="site/img/{{course.key}}.png" alt="{{course.name}}" />
                 </div>
                 <div class="col-xs-8">
-                    <a href="course.html?course={{x.PartitionKey}}&path={{x.RowKey}}"> {{x.PartitionKey}} </a>
+                    <a href="course.html?course={{course.name}}&path={{course.key}}"> {{course.name}} </a>
                 </div>
             </div>
         </div>
         <script>
             var app = angular.module('myApp', []);
-            app.controller('customersCtrl', function ($scope, $http) {
+            app.controller('customersCtrl', function ($scope, $http, $q) {
                 $http.get("User").then(function (response) {
                     $scope.user = response.data.trim();
                 });
 
-                $http.get("Courses").then(function (response) {
-                    $scope.courses = JSON.parse(response.data);
+                const promiseCourses = $http.get("Courses");
+                const promiseEnrollment = $http.get("Enrollment");
+
+                // wait for courses and enrollment promises
+                $q.all([promiseCourses, promiseEnrollment]).then(res => {
+                    const coursesData = JSON.parse(res[0].data);
+                    const enrollmentsData = JSON.parse(res[1].data);
+                    const courses = [];
+
+                    // merge the result from courses and enrollment
+                    for (let cd of coursesData) {
+                        courses.push({
+                            key: cd.RowKey,
+                            name: cd.PartitionKey,
+                            isEnrolled: enrollmentsData.find((o) => o.RowKey === cd.PartitionKey) !== undefined
+                        });
+                    }
+
+                    $scope.courses = courses;
                 });
             });
         </script>
