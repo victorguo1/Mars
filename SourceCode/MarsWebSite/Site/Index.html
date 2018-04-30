@@ -41,6 +41,11 @@
             padding-right: 1px;
             padding-bottom: 5px;
         }
+
+        .course-name {
+            line-height: 50px;
+            margin-left: 10px;
+        }
     </style>
 </head>
     <body>       
@@ -58,7 +63,7 @@
                 <div class="col-xs-1" style=" width:50px">
                     <img src="site/img/{{course.key}}.png" alt="{{course.name}}" />
                 </div>
-                <div class="col-xs-8">
+                <div class="col-xs-8 course-name">
                     <a href="course.html?course={{course.name}}&path={{course.key}}&isEnrolled={{course.isEnrolled}}"> {{course.name}} </a>
                     <i ng-if="course.isEnrolled" class="fab fa-rendact fa-xs"></i>
                 </div>
@@ -73,7 +78,7 @@
                 <div class="col-xs-1" style="width:50px">
                     <img src="site/img/{{course.key}}.png" alt="{{course.name}}" />
                 </div>
-                <div class="col-xs-8">
+                <div class="col-xs-8 course-name">
                     <a href="course.html?course={{course.name}}&path={{course.key}}&isEnrolled={{course.isEnrolled}}"> {{course.name}} </a> 
                     <i ng-if="course.isEnrolled" class="fab fa-rendact fa-xs"></i>
                 </div>
