@@ -70,7 +70,7 @@
                 <a href="index" target="_self"> <i class="fas fa-home"></i> </a>
             </div>
              
-            <div id="breadcrumb" class="col-xs-7" style="height:40px">start</div>
+            <div id="breadcrumb" class="col-xs-11" style="height:40px;font-weight:bold">start</div>
         </div>
         <div class="row" ng-repeat="x in dirOrFiles | orderBy : ['Type', 'Name'] ">
                 <ngif ng-if="x.Type == 'directory'">
@@ -162,9 +162,9 @@
              for (i = 0; i < folders.length; i++) {
                  var linkHtml;
                  if (i < folders.length - 1 ) { 
-                    linkHtml = "<h4><a ng-click='getSubfolders(&apos;" + currentLink + "&apos;)'>" + folders[i] + " / " + "</a> </h4>";
+                    linkHtml = "<a ng-click='getSubfolders(&apos;" + currentLink + "&apos;)'>" + folders[i] + " / " + "</a>  ";
                  } else {
-                     linkHtml = "<h4><span>" + folders[i] + "</span></h4>";
+                     linkHtml = "<span>" + folders[i] + "</span> ";
                  }
                  var subLink = angular.element(linkHtml);
                  divRoot.append(subLink);
