@@ -18,10 +18,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <style>
         h1 {
-            font-size: 24px;
             color: #08a3ca;
         }
 
@@ -46,10 +46,11 @@
     <body>       
         <div style="margin-left:10px" class="container" ng-app="myApp" ng-controller="customersCtrl">
             <div ng-include="'header.html'"></div>
+            <div ng-include="'content/news.html'"></div>
 
             <div class="row">
                 <div class="col-xs-8">
-                    <b>Cloud Series</b>
+                    <h4>Cloud Series</h4>
                 </div>
             </div>
             
@@ -59,13 +60,13 @@
                 </div>
                 <div class="col-xs-8">
                     <a href="course.html?course={{course.name}}&path={{course.key}}&isEnrolled={{course.isEnrolled}}"> {{course.name}} </a>
-                    <i ng-if="course.isEnrolled" class="fa fa-registered"></i>
+                    <i ng-if="course.isEnrolled" class="fab fa-rendact fa-xs"></i>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-xs-8" >
-                    <b>.Net Development Series</b>
+                    <h4>.Net Development Series</h4>
                 </div>
             </div>
             <div ng-repeat="course in courses | orderBy : 'name' | lowercase | filter : '.net'" class="row">
@@ -73,8 +74,8 @@
                     <img src="site/img/{{course.key}}.png" alt="{{course.name}}" />
                 </div>
                 <div class="col-xs-8">
-                    <a href="course.html?course={{course.name}}&path={{course.key}}&isEnrolled={{course.isEnrolled}}"> {{course.name}} </a>
-                    <i ng-if="course.isEnrolled" class="fa fa-registered"></i>
+                    <a href="course.html?course={{course.name}}&path={{course.key}}&isEnrolled={{course.isEnrolled}}"> {{course.name}} </a> 
+                    <i ng-if="course.isEnrolled" class="fab fa-rendact fa-xs"></i>
                 </div>
             </div>
         </div>

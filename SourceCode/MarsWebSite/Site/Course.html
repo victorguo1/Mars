@@ -21,8 +21,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
     <style>
-        h1 {
-            font-size: 24px;
+        h1 {            
             color: #08a3ca;
         }
         .fileImage {
@@ -45,36 +44,26 @@
             padding-right: 1px;
             padding-bottom: 5px;
         }
+
     </style>
     <base href="/">
 </head>
 <body>
     
     <div style="margin-left:10px" class="container" ng-app="myApp" ng-controller="customersCtrl">
-        <div class="row">
-            <div class="col-xs-12">
-                <h1>From Zero to Hero!</h1>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-4">
-                <div>Hello {{user}}!</div>
-            </div>
-            <div class="col-xs-8">
-                <div ng-if="user==''"> <a target="_self" href="/.auth/login/microsoftaccount?post_logout_redirect_uri=/index">Login</a></div>
-                <div ng-if="!user==''"><a target="_self" href="/.auth/logout?post_logout_redirect_uri=/EndSession">Logout</a></div>
-            </div>
-        </div>
+        <div ng-include="'header.html'"></div>
 
         <div class="row">
             <div class="col-xs-1 "  style=" width:50px">
                 <img class="fileImage" src="site/img/{{root}}.png" />  
             </div>
             <div class="col-xs-9">
-                <b>{{course}}</b>
-                <i ng-if="isEnrolled" class="fa fa-registered"></i>
+                <h4>{{course}}</h4> 
+                <i ng-if="isEnrolled" class="fab fa-rendact fa-xs"></i>
             </div>
         </div>
+
+        <div ng-include= "courseDescriptiontemplateUrl()"></div>
 
         <div class="row">
             <div class="col-xs-1" style="width:30px">
@@ -132,7 +121,11 @@
              $scope.path = path;
              $scope.root = getRoot(path);
              $scope.folders = getFolders(path);
-             
+
+             $scope.courseDescriptiontemplateUrl = function () {
+                 return  "content/" + $scope.root + "_desc.html";
+             }
+
              $http.get("Services/" + path).then(function (response) {
                  $scope.dirOrFiles = JSON.parse(response.data);                
              });
@@ -169,9 +162,9 @@
              for (i = 0; i < folders.length; i++) {
                  var linkHtml;
                  if (i < folders.length - 1 ) { 
-                    linkHtml = "<a ng-click='getSubfolders(&apos;" + currentLink + "&apos;)'>" + folders[i] + " / " + "</a> ";
+                    linkHtml = "<h4><a ng-click='getSubfolders(&apos;" + currentLink + "&apos;)'>" + folders[i] + " / " + "</a> </h4>";
                  } else {
-                     linkHtml = "<span>" + folders[i] + "</span>";
+                     linkHtml = "<h4><span>" + folders[i] + "</span></h4>";
                  }
                  var subLink = angular.element(linkHtml);
                  divRoot.append(subLink);
