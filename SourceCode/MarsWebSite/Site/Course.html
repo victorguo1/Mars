@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="myApp" ng-controller="customersCtrl">
 
 <head>
 
@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>From Zero to Hero: Cloud and more</title>
+    <title>{{course}},from Zero to Hero</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -58,7 +58,7 @@
 </head>
 <body>
     
-    <div style="margin-left:10px" class="container" ng-app="myApp" ng-controller="customersCtrl">
+    <div style="margin-left:10px" class="container" >
         <div ng-include="'header.html'"></div>
 
         <div class="row">
