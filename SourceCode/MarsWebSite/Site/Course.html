@@ -123,7 +123,7 @@
              $scope.folders = getFolders(path);
 
              $scope.courseDescriptiontemplateUrl = function () {
-                 return  "content/" + $scope.root + "_desc.html";
+                 return $scope.root + "_desc.html";
              }
 
              $http.get("Services/" + path).then(function (response) {
