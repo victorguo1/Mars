@@ -1,6 +1,6 @@
 # Mars - Azure Serverless Function in Action
 
-live site: www.cloudhero.com
+live site: www.cloudhero.me
 
 ## User Story
 A user launches the website and login in. Then she will see a list of courses that she has registered. From there, she can click the course and navigate files.
