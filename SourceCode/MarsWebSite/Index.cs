@@ -29,7 +29,7 @@ namespace MarsWebSite
         }
 
         [FunctionName("Page")]
-        public static async Task<HttpResponseMessage> Course(
+        public static async Task<HttpResponseMessage> Page(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", 
             Route = "{page}")]
             HttpRequestMessage req, 
