@@ -16,7 +16,7 @@ namespace Mars.ComponentsTests
         {
             string keywords = "angular";
             string location = "toronto";
-            var jobList = JobService.GetJobs(keywords, location);
+            var jobList = new JobService().GetJobs(keywords, location);
 
             Assert.IsTrue(jobList[0].Title.ToLower().Contains(keywords));
             Assert.IsTrue(jobList[0].Location.ToLower().Contains(location));

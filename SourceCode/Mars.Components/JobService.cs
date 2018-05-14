@@ -11,11 +11,18 @@ namespace Mars.Components
 {
     public class JobService
     {
-        static public List<Job> GetJobs(string keywords, string where = "toronto")
+        public List<Job> GetJobs(string keywords, string where)
         {
+            // default to toronto if where is empty or null
+            if (string.IsNullOrEmpty(where))
+            {
+                where = "toronto";
+            }
+
             string link = $"https://www.indeed.ca/jobs?q={keywords}&l={where}";
             List<Job> jobList = new List<Job>();
 
+            // call http
             using (var client = new HttpClient())
             {
                 var response = client.GetAsync(link).Result;
@@ -41,12 +48,12 @@ namespace Mars.Components
             return jobList;
         }
 
-        static private string TrimAndRemoveNewLine(string text)
+        private string TrimAndRemoveNewLine(string text)
         {
             return Regex.Replace(text.Trim(), @"\t|\n|\r", "");
         }
 
-        static private string GetTextFromNode(HtmlNode node, string xPath)
+        private string GetTextFromNode(HtmlNode node, string xPath)
         {
             return TrimAndRemoveNewLine(node.SelectSingleNode(xPath).InnerText);
         }
