@@ -49,30 +49,96 @@
             line-height: 50px;
             margin-left: 10px;
         }
+
+        .main {
+            height: 600px;
+        }
+
+        .job-list {
+            height: 600px;
+            overflow-y: scroll;
+        }
+
+        .job-count {
+            font-size: 12px;
+        }
+
+        .job {
+            padding: 10px 5px;
+        }
+
+        .job-title {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .job-attr {
+            font-size: 14px;
+        }
+
+        .job-summary {
+            font-size: 12px;
+        }
+
+        .close-job {
+            cursor: pointer;
+        }
+
+        .no-jobs {
+            text-align: center;
+            padding: 20px 5px;
+        }
     </style>
 </head>
     <body>       
         <div style="margin-left:10px" class="container" ng-app="myApp" ng-controller="customersCtrl">
             <div ng-include="'header.html'"></div>
             <div ng-include="'news.html'"></div>
-
-            <div class="row">
-                <div class="col-xs-8">
+            <div class="row main">
+                <div class="col-xs-6">
                     <h4>Cloud Series</h4>
+                    <div ng-repeat="course in courses | orderBy : 'name' | lowercase | filter : '!.net'" class="row">
+                        <div class="col-xs-1" style=" width:50px">
+                            <img src="site/img/{{course.key}}.png" alt="{{course.name}}" />
+                        </div>
+                        <div class="col-xs-10 course-name">
+                            <a href="course.html?course={{course.name}}&path={{course.key}}&isEnrolled={{course.isEnrolled}}"> {{course.name}} </a>
+                            <i ng-if="course.isEnrolled" class="fab fa-rendact fa-xs"></i>
+                            <a href="#" keywords="aws" ng-click="searchJobs(course.keywords)">Jobs</a>
+                        </div>
+                    </div>
+                    <h4>.Net Development Series</h4>
+                    <div ng-repeat="course in courses | orderBy : 'name' | lowercase | filter : '.net'" class="row">
+                        <div class="col-xs-1" style="width:50px">
+                            <img src="site/img/{{course.key}}.png" alt="{{course.name}}" />
+                        </div>
+                        <div class="col-xs-10 course-name">
+                            <a href="course.html?course={{course.name}}&path={{course.key}}&isEnrolled={{course.isEnrolled}}"> {{course.name}} </a>
+                            <i ng-if="course.isEnrolled" class="fab fa-rendact fa-xs"></i>
+                            <a href="#" keywords=".net" ng-click="searchJobs(course.keywords)">Jobs</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-            <div ng-repeat="course in courses | orderBy : 'name' | lowercase | filter : '!.net'" class="row">
-                <div class="col-xs-1" style=" width:50px">
-                    <img src="site/img/{{course.key}}.png" alt="{{course.name}}" />
-                </div>
-                <div class="col-xs-8 course-name">
-                    <a href="course.html?course={{course.name}}&path={{course.key}}&isEnrolled={{course.isEnrolled}}"> {{course.name}} </a>
-                    <i ng-if="course.isEnrolled" class="fab fa-rendact fa-xs"></i>
-                </div>
-            </div>
-
-            <div class="row">
+                <div class="col-xs-6" ng-if="jobs">
+                    <div>
+                        <span class="job-count" ng-bind-template="{{ jobCount }} Jobs"></span>
+                        <i class="fa fa-window-close pull-right close-job" aria-hidden="true" ng-click="closeJobList()"></i>
+                    </div>
+                    <div class="pull-right job-list" ng-if="jobs.length > 0">
+                        <div class="job" ng-repeat="job in jobs">
+                            <div class="job-title">
+                                <a href="{{ ::job.url }}" target="_blank" ng-bind="::job.title"></a>
+                            </div>
+                            <div class="job-attr" ng-bind-template="{{ ::job.company }} - {{ ::job.location }}"></div>
+                            <div class="job-summary" ng-bind="::job.summary"></div>
+                        </div>
+                    </div>
+                    <div class="no-jobs" ng-if="jobs.length == 0">
+                        Currently no jobs related to this course!
+                    </div>
+                </div>   
+            </div>                        
+            <!--<div class="row">
                 <div class="col-xs-8" >
                     <h4>.Net Development Series</h4>
                 </div>
@@ -82,11 +148,11 @@
                     <img src="site/img/{{course.key}}.png" alt="{{course.name}}" />
                 </div>
                 <div class="col-xs-8 course-name">
-                    <a href="course.html?course={{course.name}}&path={{course.key}}&isEnrolled={{course.isEnrolled}}"> {{course.name}} </a> 
+                    <a href="course.html?course={{course.name}}&path={{course.key}}&isEnrolled={{course.isEnrolled}}"> {{course.name}} </a>
                     <i ng-if="course.isEnrolled" class="fab fa-rendact fa-xs"></i>
+                    <a href="#">Jobs</a>
                 </div>
-            </div>
-
+            </div>-->
             <div class="row"><br /><br /></div>
             <div class="row">
                 <div class="col-xs-12" >
@@ -115,12 +181,27 @@
                         courses.push({
                             key: cd.RowKey,
                             name: cd.PartitionKey,
-                            isEnrolled: enrollmentsData.find((o) => o.RowKey === cd.PartitionKey) !== undefined
+                            isEnrolled: enrollmentsData.find((o) => o.RowKey === cd.PartitionKey) !== undefined,
+                            keywords: cd.RowKey     // use course keys temporary
                         });
                     }
 
                     $scope.courses = courses;
                 });
+
+                $scope.searchJobs = (keywords) => {
+                    const location = 'toronto';
+                    const url = `Jobs?keywords=${keywords}&locaion=${location}`
+
+                    $http.get(url).then(res => {
+                        $scope.jobs = res.data;
+                        $scope.jobCount = res.data.length;
+                    });
+                }
+
+                $scope.closeJobList = () => {
+                    $scope.jobs = null;
+                }
             });
         </script>
     </body>

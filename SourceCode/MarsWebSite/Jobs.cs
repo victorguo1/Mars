@@ -2,6 +2,7 @@
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,15 +26,19 @@ namespace MarsWebSite
             string location = req.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "location", true) == 0).Value;
 
             JobService service = new JobService();
-            List<Job> jobs = new List<Job>();
+            List<Job> jobList = new List<Job>();
 
             if (!string.IsNullOrEmpty(keywords))
             {
-                jobs.AddRange(service.GetJobs(keywords, location));
+                jobList.AddRange(service.GetJobs(keywords, location));
             }
-                        
-            // Fetching the name from the path parameter in the request URL
-            return req.CreateResponse(HttpStatusCode.OK, jobs, "application/json");
+
+            string json = JsonConvert.SerializeObject(jobList);
+
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            };
         }
     }
 }
