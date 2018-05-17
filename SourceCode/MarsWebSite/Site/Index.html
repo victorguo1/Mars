@@ -88,6 +88,11 @@
             text-align: center;
             padding: 20px 5px;
         }
+
+        .job-search {
+            width: 20px;
+            height: 20px;
+        }
     </style>
 </head>
     <body>       
@@ -98,13 +103,15 @@
                 <div class="col-xs-6">
                     <h4>Cloud Series</h4>
                     <div ng-repeat="course in courses | orderBy : 'name' | lowercase | filter : '!.net'" class="row">
-                        <div class="col-xs-1" style=" width:50px">
+                        <div class="col-xs-1" style="width:50px">
                             <img src="site/img/{{course.key}}.png" alt="{{course.name}}" />
                         </div>
                         <div class="col-xs-10 course-name">
                             <a href="course.html?course={{course.name}}&path={{course.key}}&isEnrolled={{course.isEnrolled}}"> {{course.name}} </a>
                             <i ng-if="course.isEnrolled" class="fab fa-rendact fa-xs"></i>
-                            <a href="#" keywords="aws" ng-click="searchJobs(course.keywords)">Jobs</a>
+                            <a href="#" keywords="aws" ng-click="searchJobs(course.keywords)">
+                                <img src="site/img/job-search.png" class="job-search"  title="job search" />
+                            </a>
                         </div>
                     </div>
                     <h4>.Net Development Series</h4>
@@ -115,7 +122,9 @@
                         <div class="col-xs-10 course-name">
                             <a href="course.html?course={{course.name}}&path={{course.key}}&isEnrolled={{course.isEnrolled}}"> {{course.name}} </a>
                             <i ng-if="course.isEnrolled" class="fab fa-rendact fa-xs"></i>
-                            <a href="#" keywords=".net" ng-click="searchJobs(course.keywords)">Jobs</a>
+                            <a href="#" keywords=".net" ng-click="searchJobs(course.keywords)">
+                                <img src="site/img/job-search.png" class="job-search" title="job search" />
+                            </a>
                         </div>
                     </div>
                 </div>
