@@ -75,10 +75,10 @@ namespace Mars.Components
             return isEnrolled;
         }
 
-        private List<TableEntity> GetCoursesInternal() {
+        private List<CourseTableEntity> GetCoursesInternal() {
             CloudTable table = _sasClient.GetTableReference(StorageAppSettings.CourseTable);
 
-            var courses = table.ExecuteQuery(new TableQuery<TableEntity>()).ToList();
+            var courses = table.ExecuteQuery(new TableQuery<CourseTableEntity>()).ToList();
             return courses;
         }
         private List<TableEntity> GetEnrollmentInternal(string email) {

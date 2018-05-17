@@ -191,7 +191,7 @@
                             key: cd.RowKey,
                             name: cd.PartitionKey,
                             isEnrolled: enrollmentsData.find((o) => o.RowKey === cd.PartitionKey) !== undefined,
-                            keywords: cd.RowKey     // use course keys temporary
+                            keywords: cd.keywords     // use course keys temporary
                         });
                     }
 
