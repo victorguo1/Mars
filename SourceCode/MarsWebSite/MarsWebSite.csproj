@@ -64,6 +64,9 @@
     <None Update="Site\img\foundation.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Site\img\job-search.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Site\img\mcts.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
