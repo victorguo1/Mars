@@ -36,7 +36,7 @@ namespace Mars.Components
                 foreach (HtmlNode node in nodes)
                 {
                     string title = GetTextFromNode(node, "h2/a");
-                    string company = GetTextFromNode(node, "span[@class='company']");
+                    string company = GetTextFromNode(node, "div/span[@class='company']");       // update the xPath
                     string location = GetTextFromNode(node, "span[@class='location']");
                     string summary = GetTextFromNode(node, "table/tr/td/div/span[@class='summary']");
                     string url = node.SelectSingleNode("h2/a").Attributes["href"].Value;
@@ -50,12 +50,19 @@ namespace Mars.Components
 
         private string TrimAndRemoveNewLine(string text)
         {
+            // change null to empty change to return
+            if (text == null)
+            {
+                text = String.Empty;
+            }
+
             return Regex.Replace(text.Trim(), @"\t|\n|\r", "");
         }
 
         private string GetTextFromNode(HtmlNode node, string xPath)
         {
-            return TrimAndRemoveNewLine(node.SelectSingleNode(xPath).InnerText);
+            // add ? for null checking
+            return TrimAndRemoveNewLine(node.SelectSingleNode(xPath)?.InnerText);
         }
     }
 }
