@@ -31,10 +31,13 @@
     <None Update="Site\awssoluationarchitect.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Site\awssoluationarchitect_desc.html">
+    <None Update="Site\awssolutionarchitect_desc.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Site\azuresolution.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Site\azuresolution_desc.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Site\content\awssoluationarchitect_intro.pdf">
@@ -52,7 +55,7 @@
     <None Update="Site\Header.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Site\img\awssoluationarchitect.png">
+    <None Update="Site\img\awssolutionarchitect.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Site\img\azuresolution.png">
