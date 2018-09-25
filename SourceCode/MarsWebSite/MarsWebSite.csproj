@@ -43,7 +43,7 @@
     <None Update="Site\content\awssoluationarchitect_intro.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Site\content\LoginHelp.docx">
+    <None Update="Site\content\LoginHelp.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Site\Course.html">
